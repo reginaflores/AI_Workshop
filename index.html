@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Major AI Platforms — Reference Guide</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0F0F1A; color: #E8E8F0; font-family: Georgia, 'Times New Roman', serif; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1a1a2e; }
+    ::-webkit-scrollbar-thumb { background: #6C63FF; border-radius: 3px; }
+    .pill-btn { cursor: pointer; border: none; transition: all 0.2s; font-family: inherit; }
+    .pill-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+    .row-hover:hover { background: rgba(108,99,255,0.08) !important; }
+    input::placeholder { color: #555570; }
+    input { outline: none; }
+    @media (max-width: 600px) {
+      .table-grid { grid-template-columns: 1.2fr 1fr 2fr 0.4fr 0.4fr !important; }
+      .hide-mobile { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    const platforms = [
+      // TEXT & CHAT
+      { category: "Text & Chat", name: "Claude", company: "Anthropic", free: true, paid: true, highlight: "Safety-focused, long docs & deep analysis" },
+      { category: "Text & Chat", name: "ChatGPT", company: "OpenAI", free: true, paid: true, highlight: "Most popular, huge ecosystem & plugins" },
+      { category: "Text & Chat", name: "Gemini", company: "Google", free: true, paid: true, highlight: "Google Workspace integration, real-time search" },
+      { category: "Text & Chat", name: "Copilot", company: "Microsoft", free: true, paid: true, highlight: "Built into Office 365 & Windows" },
+      { category: "Text & Chat", name: "Grok", company: "xAI", free: true, paid: true, highlight: "Integrated with X (Twitter), unfiltered tone" },
+      { category: "Text & Chat", name: "DeepSeek", company: "DeepSeek (China)", free: true, paid: false, highlight: "Powerful open-source model, caused major buzz" },
+      { category: "Text & Chat", name: "Meta AI", company: "Meta", free: true, paid: false, highlight: "Built into WhatsApp, Instagram, Facebook" },
+      { category: "Text & Chat", name: "Mistral", company: "Mistral AI", free: true, paid: true, highlight: "Leading European open-source model" },
+      { category: "Text & Chat", name: "Perplexity", company: "Perplexity AI", free: true, paid: true, highlight: "AI search engine with cited sources" },
+      { category: "Text & Chat", name: "Pi", company: "Inflection AI", free: true, paid: false, highlight: "Emotional, coaching-focused conversations" },
+      { category: "Text & Chat", name: "LLaMA", company: "Meta", free: true, paid: false, highlight: "Open source, run locally on your computer" },
+      { category: "Text & Chat", name: "Command R", company: "Cohere", free: false, paid: true, highlight: "Enterprise RAG & business workflows" },
+
+      // IMAGE
+      { category: "Image", name: "DALL·E 3", company: "OpenAI", free: false, paid: true, highlight: "Inside ChatGPT, follows prompts precisely" },
+      { category: "Image", name: "Midjourney", company: "Midjourney", free: false, paid: true, highlight: "Best artistic & cinematic quality" },
+      { category: "Image", name: "Stable Diffusion", company: "Stability AI", free: true, paid: true, highlight: "Open source, highly customizable" },
+      { category: "Image", name: "Adobe Firefly", company: "Adobe", free: true, paid: true, highlight: "Commercially safe, built into Photoshop" },
+      { category: "Image", name: "Canva AI", company: "Canva", free: true, paid: true, highlight: "Easy design for non-designers" },
+      { category: "Image", name: "Ideogram", company: "Ideogram", free: true, paid: true, highlight: "Best at text inside images (logos, posters)" },
+      { category: "Image", name: "Leonardo AI", company: "Leonardo", free: true, paid: true, highlight: "Game art, characters & concept art" },
+      { category: "Image", name: "Imagen", company: "Google", free: false, paid: true, highlight: "Google's image model inside Gemini" },
+      { category: "Image", name: "Bing Image Creator", company: "Microsoft", free: true, paid: false, highlight: "Free DALL·E access via Bing" },
+      { category: "Image", name: "Grok Aurora", company: "xAI", free: true, paid: true, highlight: "Built into Grok on X platform" },
+
+      // VIDEO
+      { category: "Video", name: "Sora", company: "OpenAI", free: false, paid: true, highlight: "Photorealistic, long coherent clips" },
+      { category: "Video", name: "Runway", company: "Runway", free: true, paid: true, highlight: "Pro-grade tools used by filmmakers" },
+      { category: "Video", name: "Pika", company: "Pika Labs", free: true, paid: true, highlight: "Fun, beginner-friendly short clips" },
+      { category: "Video", name: "Kling", company: "Kuaishou", free: true, paid: true, highlight: "High-quality realistic motion" },
+      { category: "Video", name: "Luma Dream Machine", company: "Luma AI", free: true, paid: true, highlight: "Stunning quality, popular free tier" },
+      { category: "Video", name: "Google Veo", company: "Google", free: false, paid: true, highlight: "Sora competitor, inside Gemini" },
+      { category: "Video", name: "Synthesia", company: "Synthesia", free: false, paid: true, highlight: "AI avatar presenters for training videos" },
+      { category: "Video", name: "HeyGen", company: "HeyGen", free: true, paid: true, highlight: "Avatar & talking-head videos" },
+
+      // AUDIO & MUSIC
+      { category: "Audio & Music", name: "Suno", company: "Suno", free: true, paid: true, highlight: "Full songs from text — any genre" },
+      { category: "Audio & Music", name: "Udio", company: "Udio", free: true, paid: true, highlight: "High-fidelity music generation" },
+      { category: "Audio & Music", name: "ElevenLabs", company: "ElevenLabs", free: true, paid: true, highlight: "Voice cloning & realistic text-to-speech" },
+      { category: "Audio & Music", name: "Murf", company: "Murf AI", free: true, paid: true, highlight: "Voiceovers for videos & presentations" },
+      { category: "Audio & Music", name: "Descript", company: "Descript", free: true, paid: true, highlight: "Podcast & video editing with AI voice" },
+
+      // CODING
+      { category: "Coding", name: "GitHub Copilot", company: "GitHub / Microsoft", free: true, paid: true, highlight: "Inline code suggestions in VS Code" },
+      { category: "Coding", name: "Cursor", company: "Cursor", free: true, paid: true, highlight: "AI-first code editor, very popular" },
+      { category: "Coding", name: "Claude Code", company: "Anthropic", free: false, paid: true, highlight: "Terminal-based agentic coding" },
+      { category: "Coding", name: "Replit AI", company: "Replit", free: true, paid: true, highlight: "Build & deploy apps in the browser" },
+      { category: "Coding", name: "Tabnine", company: "Tabnine", free: true, paid: true, highlight: "Privacy-focused code completion" },
+      { category: "Coding", name: "v0", company: "Vercel", free: true, paid: true, highlight: "Generate React UI from text prompts" },
+
+      // PRODUCTIVITY
+      { category: "Productivity", name: "Notion AI", company: "Notion", free: false, paid: true, highlight: "Summarize, write & search inside Notion" },
+      { category: "Productivity", name: "Grammarly AI", company: "Grammarly", free: true, paid: true, highlight: "Writing assistant across all your apps" },
+      { category: "Productivity", name: "Otter.ai", company: "Otter", free: true, paid: true, highlight: "Meeting transcription & summaries" },
+      { category: "Productivity", name: "Jasper", company: "Jasper", free: false, paid: true, highlight: "Marketing copy & content at scale" },
+      { category: "Productivity", name: "Harvey", company: "Harvey", free: false, paid: true, highlight: "AI for lawyers & legal workflows" },
+      { category: "Productivity", name: "Glean", company: "Glean", free: false, paid: true, highlight: "Enterprise AI search across all your tools" },
+    ];
+
+    const categoryMeta = {
+      "Text & Chat":   { icon: "💬", color: "#6C63FF", light: "#F0EEFF" },
+      "Image":         { icon: "🎨", color: "#F59E0B", light: "#FFFBEB" },
+      "Video":         { icon: "🎬", color: "#EF4444", light: "#FFF1F1" },
+      "Audio & Music": { icon: "🎵", color: "#10B981", light: "#ECFDF5" },
+      "Coding":        { icon: "💻", color: "#3B82F6", light: "#EFF6FF" },
+      "Productivity":  { icon: "⚡", color: "#8B5CF6", light: "#F5F3FF" },
+    };
+
+    const categories = Object.keys(categoryMeta);
+
+    function App() {
+      const [activeCategory, setActiveCategory] = useState("All");
+      const [search, setSearch] = useState("");
+
+      const filtered = platforms.filter(p => {
+        const matchCat = activeCategory === "All" || p.category === activeCategory;
+        const matchSearch = search === "" ||
+          p.name.toLowerCase().includes(search.toLowerCase()) ||
+          p.company.toLowerCase().includes(search.toLowerCase()) ||
+          p.highlight.toLowerCase().includes(search.toLowerCase());
+        return matchCat && matchSearch;
+      });
+
+      const grouped = categories.reduce((acc, cat) => {
+        const items = filtered.filter(p => p.category === cat);
+        if (items.length) acc[cat] = items;
+        return acc;
+      }, {});
+
+      return (
+        <div style={{ fontFamily: "Georgia, 'Times New Roman', serif", background: "#0F0F1A", minHeight: "100vh", color: "#E8E8F0", padding: "32px 24px" }}>
+          <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+
+            {/* Header */}
+            <div style={{ marginBottom: 6 }}>
+              <span style={{ fontSize: 11, letterSpacing: 4, color: "#6C63FF", textTransform: "uppercase", fontFamily: "monospace" }}>
+                Reference Guide
+              </span>
+            </div>
+            <h1 style={{ margin: "0 0 6px", fontSize: "clamp(26px, 4vw, 40px)", fontWeight: "normal", letterSpacing: -1, color: "#FFFFFF" }}>
+              Major AI Platforms
+            </h1>
+            <p style={{ margin: "0 0 28px", color: "#7777AA", fontSize: 14, fontStyle: "italic" }}>
+              {platforms.length} platforms across {categories.length} categories — 2025
+            </p>
+
+            {/* Search */}
+            <div style={{ position: "relative", marginBottom: 20 }}>
+              <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", fontSize: 15 }}>🔍</span>
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search platforms, companies, or use cases..."
+                style={{ width: "100%", padding: "11px 16px 11px 42px", background: "#1A1A2E", border: "1px solid #2D2D4E", borderRadius: 10, color: "#E8E8F0", fontSize: 14, fontFamily: "inherit" }}
+              />
+            </div>
+
+            {/* Category filters */}
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
+              {["All", ...categories].map(cat => {
+                const isActive = activeCategory === cat;
+                const meta = categoryMeta[cat];
+                return (
+                  <button key={cat} className="pill-btn"
+                    onClick={() => setActiveCategory(cat)}
+                    style={{ padding: "7px 16px", borderRadius: 20, fontSize: 13, background: isActive ? (meta ? meta.color : "#6C63FF") : "#1A1A2E", color: isActive ? "#fff" : "#9999BB", border: `1px solid ${isActive ? "transparent" : "#2D2D4E"}`, fontWeight: isActive ? 600 : 400 }}>
+                    {meta ? `${meta.icon} ${cat}` : "✦ All"}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div style={{ fontSize: 11, color: "#55557A", marginBottom: 16, fontFamily: "monospace" }}>
+              Showing {filtered.length} of {platforms.length} platforms
+            </div>
+
+            {/* Tables */}
+            {Object.entries(grouped).map(([cat, items]) => {
+              const meta = categoryMeta[cat];
+              return (
+                <div key={cat} style={{ marginBottom: 36 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                    <span style={{ fontSize: 20 }}>{meta.icon}</span>
+                    <h2 style={{ margin: 0, fontSize: 17, fontWeight: 600, color: meta.color, letterSpacing: 0.5 }}>{cat}</h2>
+                    <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${meta.color}44, transparent)` }} />
+                    <span style={{ fontSize: 11, color: "#55557A", fontFamily: "monospace" }}>{items.length} platforms</span>
+                  </div>
+
+                  <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid #2D2D4E" }}>
+                    {/* Column headers */}
+                    <div className="table-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 2.6fr 0.5fr 0.5fr", background: "#13132A", padding: "9px 16px", borderBottom: "1px solid #2D2D4E", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "#55557A", fontFamily: "monospace", gap: 12 }}>
+                      <div>Platform</div>
+                      <div>Company</div>
+                      <div>Best For</div>
+                      <div style={{ textAlign: "center" }}>Free</div>
+                      <div style={{ textAlign: "center" }}>Paid</div>
+                    </div>
+
+                    {items.map((p, i) => (
+                      <div key={p.name} className="row-hover table-grid" style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 2.6fr 0.5fr 0.5fr", padding: "11px 16px", gap: 12, alignItems: "center", background: i % 2 === 0 ? "#0F0F1A" : "#111122", borderBottom: i < items.length - 1 ? "1px solid #1E1E35" : "none", transition: "background 0.15s" }}>
+                        <div style={{ fontWeight: 600, fontSize: 14, color: "#FFFFFF" }}>{p.name}</div>
+                        <div style={{ fontSize: 13, color: "#8888AA" }}>{p.company}</div>
+                        <div style={{ fontSize: 13, color: "#AAAACC", lineHeight: 1.4 }}>{p.highlight}</div>
+                        <div style={{ textAlign: "center", fontSize: 15, color: p.free ? "#10B981" : "#444466" }}>{p.free ? "✓" : "—"}</div>
+                        <div style={{ textAlign: "center", fontSize: 15, color: p.paid ? "#6C63FF" : "#444466" }}>{p.paid ? "✓" : "—"}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+
+            {filtered.length === 0 && (
+              <div style={{ textAlign: "center", padding: "60px 0", color: "#55557A", fontSize: 16 }}>
+                No platforms match your search.
+              </div>
+            )}
+
+            <div style={{ marginTop: 40, paddingTop: 20, borderTop: "1px solid #2D2D4E", textAlign: "center", fontSize: 12, color: "#44445A", fontStyle: "italic" }}>
+              The AI landscape changes weekly. This covers the most widely used platforms as of early 2025.
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
