@@ -4,7 +4,7 @@
 # **AI Workshop March 13th, 2026**
 
 AI Platform Overview:
-https://reginaflores.github.io/AI_Workshop/
+https://reginaflores.github.io/AI_Workshop/platforms.html
 
 Workshop Slides:
 https://reginaflores.github.io/AI_Workshop/slides.html
