@@ -179,7 +179,7 @@
 </head>
 <body>
 
-<div id="page-counter">01 / 15</div>
+<div id="page-counter">01 / 14</div>
 <nav id="nav-dots">
   <button class="dot active" onclick="goTo(0)"></button>
   <button class="dot" onclick="goTo(1)"></button>
@@ -195,7 +195,6 @@
   <button class="dot" onclick="goTo(11)"></button>
   <button class="dot" onclick="goTo(12)"></button>
   <button class="dot" onclick="goTo(13)"></button>
-  <button class="dot" onclick="goTo(14)"></button>
 </nav>
 
 <!-- PAGE 1: COVER -->
@@ -749,8 +748,8 @@
 <section id="p11">
   <div style="max-width:680px;text-align:center;padding:60px 40px;">
     <div style="font-size:30px;margin-bottom:28px;opacity:0.6;">✦</div>
-    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,60px);color:var(--cream);line-height:1.1;margin-bottom:22px;letter-spacing:-1px;">The best time to start<br/>was yesterday.<br/>The next best time<br/>is <em style="color:var(--gold);font-style:italic;">now.</em></h2>
-    <p style="font-size:16px;color:rgba(245,240,232,0.5);line-height:1.8;font-weight:300;margin-bottom:44px;">AI won't replace you. But someone who knows how to use AI might. The good news: it takes about 20 minutes to go from zero to genuinely useful. Start tonight.</p>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,60px);color:var(--cream);line-height:1.1;margin-bottom:22px;letter-spacing:-1px;">You already have<br/>everything<br/>it takes.<br/><em style="color:var(--gold);font-style:italic;">Now you have the tools.</em></h2>
+    <p style="font-size:16px;color:rgba(245,240,232,0.5);line-height:1.8;font-weight:300;margin-bottom:44px;">Curiosity, taste, and knowing what you need — that's the real skill. AI just gives you a way to act on it, faster and bigger than ever before.</p>
     <a href="https://reginaflores.github.io/AIConsulting/" target="_blank" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:1px;text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.4);padding-bottom:2px;">ReginaFloresMir.ai</a>
   </div>
 </section>
@@ -767,7 +766,7 @@
       if (entry.isIntersecting) {
         const i = Array.from(sections).indexOf(entry.target);
         dots.forEach((d, j) => d.classList.toggle('active', j === i));
-        counter.textContent = String(i + 1).padStart(2, '0') + ' / 15';
+        counter.textContent = String(i + 1).padStart(2, '0') + ' / 14';
       }
     });
   }, { threshold: 0.5 });
