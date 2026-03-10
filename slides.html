@@ -4,6 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Essentials</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,12 +76,12 @@
     .stat .num { font-family: 'Playfair Display', serif; font-size: 40px; color: var(--rose); font-weight: 700; line-height: 1; }
     .stat .lbl { font-size: 11px; color: var(--slate); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
 
-    /* PAGE 3 */
-    #p3 { background: #16213e; }
-    #p3 .inner { max-width: 1000px; width: 100%; padding: 80px 40px; }
-    #p3 .top { margin-bottom: 48px; }
-    #p3 h2 { font-family: 'Playfair Display', serif; font-size: clamp(30px, 5vw, 52px); color: var(--cream); line-height: 1.1; }
-    #p3 h2 em { color: var(--gold); font-style: italic; }
+    /* PAGE 4 - CATEGORIES */
+    #pCat { background: #16213e; }
+    #pCat .inner { max-width: 1000px; width: 100%; padding: 80px 40px; }
+    #pCat .top { margin-bottom: 48px; }
+    #pCat h2 { font-family: 'Playfair Display', serif; font-size: clamp(30px, 5vw, 52px); color: var(--cream); line-height: 1.1; }
+    #pCat h2 em { color: var(--gold); font-style: italic; }
     .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
     .cat-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 26px 22px; transition: all 0.3s; }
     .cat-card:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); }
@@ -90,8 +93,9 @@
 
     /* PAGE 4 */
     #p4 { background: var(--cream); }
-    #p4 .split-wrap { grid-template-columns: 1fr 1.2fr; }
-    #p4 .split-left { background: var(--rose); }
+    #p4 .split-wrap { grid-template-columns: 1fr 1.2fr; align-items: start; }
+    #p4 .split-left { background: var(--rose); justify-content: flex-start; padding-top: 60px; }
+    #p4 .split-right { justify-content: flex-start; padding-top: 60px; }
     #p4 .split-left h2 { color: #fff; }
     #p4 .split-left p { color: rgba(255,255,255,0.75); }
     #p4 .split-left .page-num { color: rgba(255,255,255,0.12); }
@@ -132,12 +136,16 @@
     #p6 { background: var(--cream); }
     #p6 .split-wrap { grid-template-columns: 1.1fr 1fr; }
     #p6 .split-right { background: var(--ink); }
-    #p6 .split-left h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); color: var(--ink); line-height: 1.15; margin-bottom: 22px; }
-    #p6 .split-left p { color: var(--slate); line-height: 1.8; font-size: 15px; font-weight: 300; margin-bottom: 28px; }
+    #p6 .split-left h2 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4vw, 44px); color: var(--cream); line-height: 1.15; margin-bottom: 22px; }
+    #p6 .split-left p { color: rgba(245,240,232,0.65); line-height: 1.8; font-size: 15px; font-weight: 300; margin-bottom: 28px; }
+    #p6 .tip-text { color: rgba(245,240,232,0.65); }
+    #p6 .tip-text strong { color: var(--cream); }
+    #p6 .chapter-label { color: rgba(245,240,232,0.5); }
     .tip-list { display: flex; flex-direction: column; gap: 14px; }
-    .tip { display: flex; gap: 12px; align-items: flex-start; }
+    .tip-list { display: flex; flex-direction: column; gap: 16px; text-align: left; }
+    .tip { display: flex; gap: 12px; align-items: flex-start; text-align: left; }
     .tip-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .tip-text { font-size: 13px; color: var(--slate); line-height: 1.6; }
+    .tip-text { font-size: 13px; color: var(--slate); line-height: 1.6; text-align: left; }
     .tip-text strong { color: var(--ink); }
     #p6 .split-right h3 { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--cream); margin-bottom: 8px; }
     #p6 .split-right .sub { font-size: 13px; color: rgba(245,240,232,0.4); margin-bottom: 32px; line-height: 1.5; }
@@ -149,6 +157,10 @@
     .resource-arrow { color: var(--gold); font-size: 16px; }
 
     /* PAGE 7 */
+    #p7 .split-left, #p7 .split-right { justify-content: flex-start; padding-top: 60px; }
+    #p9 .split-left, #p9 .split-right { justify-content: flex-start; padding-top: 60px; }
+    #p9 .split-wrap { align-items: start; }
+
     #p11 { background: var(--ink); }
     #p11 .inner { max-width: 680px; text-align: center; padding: 60px 40px; }
     #p11 .ornament { font-size: 30px; margin-bottom: 28px; opacity: 0.6; }
@@ -167,7 +179,7 @@
 </head>
 <body>
 
-<div id="page-counter">01 / 11</div>
+<div id="page-counter">01 / 15</div>
 <nav id="nav-dots">
   <button class="dot active" onclick="goTo(0)"></button>
   <button class="dot" onclick="goTo(1)"></button>
@@ -180,6 +192,10 @@
   <button class="dot" onclick="goTo(8)"></button>
   <button class="dot" onclick="goTo(9)"></button>
   <button class="dot" onclick="goTo(10)"></button>
+  <button class="dot" onclick="goTo(11)"></button>
+  <button class="dot" onclick="goTo(12)"></button>
+  <button class="dot" onclick="goTo(13)"></button>
+  <button class="dot" onclick="goTo(14)"></button>
 </nav>
 
 <!-- PAGE 1: COVER -->
@@ -221,50 +237,263 @@
   </div>
 </section>
 
-<!-- PAGE 3: CATEGORIES -->
-<section id="p3">
-  <div class="inner">
+<!-- PAGE 3: THREE TYPES OF AI -->
+<section id="p3" style="background:#0f0f1a;">
+  <div style="max-width:1000px;width:100%;padding:80px 40px;">
+    <div class="chapter-label gold-label" style="margin-bottom:12px;">Three Types of AI</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,50px);color:var(--cream);line-height:1.1;margin-bottom:12px;">Not all AI thinks <em style="font-style:italic;color:var(--gold)">the same way</em></h2>
+    <p style="font-size:14px;color:rgba(245,240,232,0.45);margin-bottom:48px;max-width:580px;line-height:1.7;font-weight:300;">Understanding these three types helps you know what any AI tool can — and can't — do for you.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+
+      <!-- PREDICTIVE -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+        <div style="background:linear-gradient(135deg,#1a2a4a,#0d1b35);padding:32px 28px 24px;">
+          <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#60a5fa;margin-bottom:16px;font-weight:500;">01 — Predictive</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:12px;">Predicts<br/>what comes next</h3>
+          <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;">Trained on patterns to forecast an outcome. It doesn't understand — it calculates probabilities.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:22px 28px;border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">Everyday examples</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>📧</span> Gmail's spam filter</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🎬</span> Netflix recommendations</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🏦</span> Credit card fraud detection</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>⌨️</span> Autocomplete on your phone</div>
+          </div>
+          <div style="margin-top:16px;padding:12px 14px;background:rgba(96,165,250,0.08);border-radius:8px;border-left:2px solid #60a5fa;">
+            <p style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;font-style:italic;">"Based on what's happened before, here's what's likely to happen next."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- GENERATIVE -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+        <div style="background:linear-gradient(135deg,#2d1f3d,#4a1942);padding:32px 28px 24px;">
+          <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c084fc;margin-bottom:16px;font-weight:500;">02 — Generative</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:12px;">Creates brand<br/>new content</h3>
+          <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;">Given a prompt, it generates something that didn't exist before — text, images, music, video, code.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:22px 28px;border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">Everyday examples</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>💬</span> Claude, ChatGPT, Gemini</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🎨</span> Midjourney, DALL·E</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🎵</span> Suno, ElevenLabs</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🎬</span> Sora, Runway</div>
+          </div>
+          <div style="margin-top:16px;padding:12px 14px;background:rgba(192,132,252,0.08);border-radius:8px;border-left:2px solid #c084fc;">
+            <p style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;font-style:italic;">"Tell me what you want, and I'll create something new for you."</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- AGENTIC -->
+      <div style="border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">
+        <div style="background:linear-gradient(135deg,#1a3a2a,#0d3320);padding:32px 28px 24px;">
+          <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#4ade80;margin-bottom:16px;font-weight:500;">03 — Agentic</div>
+          <h3 style="font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:12px;">Takes action<br/>on your behalf</h3>
+          <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7;">Goes beyond answering — it actually does things. Opens apps, browses the web, writes files, sends emails.</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:22px 28px;border-top:1px solid rgba(255,255,255,0.06);">
+          <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:12px;">Everyday examples</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>💻</span> Claude Code — builds apps</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>📧</span> AI that reads & replies to email</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🗓</span> Books your calendar for you</div>
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,0.6)"><span>🛒</span> Orders groceries automatically</div>
+          </div>
+          <div style="margin-top:16px;padding:12px 14px;background:rgba(74,222,128,0.08);border-radius:8px;border-left:2px solid #4ade80;">
+            <p style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6;font-style:italic;">"Don't just tell me — let me go handle it for you."</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="margin-top:28px;padding:18px 22px;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.15);border-radius:10px;display:flex;gap:14px;align-items:center;">
+      <span style="font-size:20px;flex-shrink:0">💡</span>
+      <p style="font-size:13px;color:rgba(245,240,232,0.55);line-height:1.7;">Most tools today combine all three. Claude is generative when you chat with it, and agentic when you use Claude Code. The lines are blurring fast.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 4: CATEGORIES -->
+<section id="pCat" style="background:#16213e;">
+  <div style="max-width:1100px;width:100%;padding:60px 40px;">
     <div class="top">
       <div class="chapter-label gold-label">The Landscape</div>
-      <h2>AI isn't one thing —<br/>it's <em>six categories</em></h2>
+      <h2>AI isn't a chatbot —<br/>it's <em>everything</em></h2>
+      <p style="font-size:14px;color:rgba(245,240,232,0.45);margin-top:10px;margin-bottom:36px;font-weight:300;">The tools you actively choose to use are just the tip of the iceberg.</p>
     </div>
-    <div class="cat-grid">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+
       <div class="cat-card">
         <div class="cat-icon">💬</div>
         <h3>Text & Chat</h3>
-        <p>Have a conversation, write an essay, analyze a document, get advice.</p>
+        <p>Conversation, writing, analysis, research, advice.</p>
         <div class="tags"><span class="tag">Claude</span><span class="tag">ChatGPT</span><span class="tag">Gemini</span></div>
       </div>
       <div class="cat-card">
         <div class="cat-icon">🎨</div>
         <h3>Image Generation</h3>
-        <p>Type a description, get a picture. From photorealistic to painterly.</p>
+        <p>Type a description, get a picture. Any style.</p>
         <div class="tags"><span class="tag">Midjourney</span><span class="tag">DALL·E</span><span class="tag">Firefly</span></div>
       </div>
       <div class="cat-card">
         <div class="cat-icon">🎬</div>
         <h3>Video Generation</h3>
-        <p>Turn text or images into short video clips, scenes, or presentations.</p>
+        <p>Text or images turned into moving clips.</p>
         <div class="tags"><span class="tag">Sora</span><span class="tag">Runway</span><span class="tag">Pika</span></div>
       </div>
       <div class="cat-card">
         <div class="cat-icon">🎵</div>
         <h3>Audio & Music</h3>
-        <p>Generate full songs, clone voices, create voiceovers in seconds.</p>
+        <p>Full songs, voice cloning, voiceovers.</p>
         <div class="tags"><span class="tag">Suno</span><span class="tag">ElevenLabs</span><span class="tag">Udio</span></div>
       </div>
       <div class="cat-card">
         <div class="cat-icon">💻</div>
         <h3>Coding</h3>
-        <p>Write, fix, and explain code. Build entire apps by describing them.</p>
+        <p>Write, fix, and build entire apps.</p>
         <div class="tags"><span class="tag">Claude Code</span><span class="tag">Cursor</span><span class="tag">Copilot</span></div>
       </div>
       <div class="cat-card">
         <div class="cat-icon">⚡</div>
         <h3>Productivity</h3>
-        <p>Summarize meetings, draft emails, search files, automate tasks.</p>
+        <p>Meetings, emails, files, tasks — automated.</p>
         <div class="tags"><span class="tag">Notion AI</span><span class="tag">Copilot</span><span class="tag">Otter.ai</span></div>
       </div>
+      <div class="cat-card">
+        <div class="cat-icon">🎮</div>
+        <h3>Gaming</h3>
+        <p>Smarter opponents, generated worlds, lifelike NPCs.</p>
+        <div class="tags"><span class="tag">NPC behavior</span><span class="tag">World gen</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🏥</div>
+        <h3>Healthcare & Science</h3>
+        <p>Reads scans, folds proteins, discovers drugs.</p>
+        <div class="tags"><span class="tag">AlphaFold</span><span class="tag">Med-PaLM</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🚗</div>
+        <h3>Autonomous Systems</h3>
+        <p>Self-driving cars, drones, and physical robots.</p>
+        <div class="tags"><span class="tag">Waymo</span><span class="tag">Tesla</span><span class="tag">Figure</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🔍</div>
+        <h3>Search & Discovery</h3>
+        <p>AI-powered search with real-time cited answers.</p>
+        <div class="tags"><span class="tag">Perplexity</span><span class="tag">Google AI</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🛡</div>
+        <h3>Security & Fraud</h3>
+        <p>Detects threats, flags fraud, protects systems.</p>
+        <div class="tags"><span class="tag">Finance</span><span class="tag">Cybersecurity</span></div>
+      </div>
+      <div class="cat-card">
+        <div class="cat-icon">🌍</div>
+        <h3>Translation</h3>
+        <p>Real-time translation, subtitles, multilingual content.</p>
+        <div class="tags"><span class="tag">DeepL</span><span class="tag">Google Translate</span></div>
+      </div>
+
+
+    <div style="margin-top:28px;text-align:center;">
+      <a href="https://reginaflores.github.io/AI_Workshop/platforms.html" target="_blank" style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;background:rgba(201,168,76,0.1);border:1px solid rgba(201,168,76,0.3);border-radius:20px;color:var(--gold);font-size:13px;text-decoration:none;letter-spacing:0.5px;transition:all 0.2s;">
+        <span>↗</span> Full Interactive Platform Reference
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE 6: AI EMBEDDED IN EVERYTHING -->
+<section id="pEmbed" style="background:var(--cream);">
+  <div style="max-width:1100px;width:100%;padding:80px 40px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+      <div>
+        <div class="chapter-label rose-label" style="margin-bottom:14px;">The bigger picture</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(30px,4vw,50px);color:var(--ink);line-height:1.1;margin-bottom:20px;">AI is already embedded in <em style="font-style:italic;color:var(--rose)">everything</em> you use.</h2>
+        <p style="font-size:15px;color:var(--slate);line-height:1.8;margin-bottom:16px;font-weight:300;">The tools on the previous slide are the ones you <em>consciously choose</em> to use. But AI has been quietly running in the background of your daily life for years — you just didn't call it that.</p>
+        <p style="font-size:15px;color:var(--slate);line-height:1.8;font-weight:300;">What's changed isn't that AI arrived. It's that it became <strong style="color:var(--ink)">visible, conversational, and creative</strong> — and now anyone can use it, not just engineers.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">📱</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Your phone</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">Face ID, autocorrect, Siri, photo sorting — all AI</div>
+        </div>
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">🎵</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Spotify & Netflix</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">Every recommendation is an AI decision</div>
+        </div>
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">🛒</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Amazon & Instagram</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">What you see first? AI chose that</div>
+        </div>
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">💳</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Your bank</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">Fraud alerts, credit scores, loan approvals</div>
+        </div>
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">📧</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Your inbox</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">Spam filters, priority sorting, smart replies</div>
+        </div>
+        <div style="padding:20px;background:#fff;border:1px solid #e8e4dc;border-radius:12px;">
+          <div style="font-size:24px;margin-bottom:8px;">🗺</div>
+          <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">Google Maps</div>
+          <div style="font-size:12px;color:var(--slate);line-height:1.5">Traffic prediction, ETA, rerouting — all AI</div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:40px;padding:20px 26px;background:rgba(196,68,90,0.06);border-left:3px solid var(--rose);border-radius:0 10px 10px 0;">
+      <p style="font-size:14px;color:var(--slate);line-height:1.7;font-style:italic;">"AI won't replace you. But the version of you that knows how to use AI will be dramatically more capable than the version that doesn't." </p>
+    </div>
+  </div>
+</section>
+
+<!-- VIBE CODING -->
+<section id="pVibe" style="background:#1a1a2e;">
+  <div style="max-width:1000px;width:100%;padding:80px 40px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;">
+
+      <div>
+        <div style="font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:500;">A New Way to Build</div>
+        <h2 style="font-family:'Playfair Display',serif;font-size:clamp(34px,5vw,58px);color:var(--cream);line-height:1.05;letter-spacing:-1px;margin-bottom:24px;">Vibe<br/><em style="font-style:italic;color:var(--gold)">Coding</em></h2>
+        <p style="font-size:15px;color:rgba(245,240,232,0.65);line-height:1.8;margin-bottom:16px;font-weight:300;">Coined by Andrej Karpathy — one of the founders of OpenAI — in early 2025 to describe a new way of building software that anyone can do.</p>
+        <p style="font-size:15px;color:rgba(245,240,232,0.65);line-height:1.8;font-weight:300;">Instead of writing code yourself, you simply <strong style="color:var(--cream)">describe what you want</strong> in plain English — and the AI builds it. You don't need to know syntax, frameworks, or computer science. You just need to know what you want.</p>
+        <div style="margin-top:28px;padding:18px 22px;background:rgba(201,168,76,0.08);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;">
+          <p style="font-size:13px;color:rgba(245,240,232,0.6);line-height:1.7;font-style:italic;">"You describe it. Claude builds it. You take the credit."</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div style="padding:22px 24px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;">
+          <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--rose);margin-bottom:10px;">The old way</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.5);line-height:1.7;">Learn Python. Study HTML. Understand databases. Take courses for months. Write hundreds of lines of code. Debug errors. Start over.</p>
+          <div style="margin-top:12px;font-size:22px;">🤓</div>
+        </div>
+
+        <div style="padding:22px 24px;background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.25);border-radius:14px;">
+          <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Vibe coding</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.65);line-height:1.7;">Open Claude Code. Type <em style="color:var(--gold)">"Build me a web app that tracks my family's weekly schedule and sends reminders."</em> Watch it appear.</p>
+          <div style="margin-top:12px;font-size:22px;">✨</div>
+        </div>
+
+        <div style="padding:18px 24px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;display:flex;gap:14px;align-items:flex-start;">
+          <span style="font-size:20px;flex-shrink:0;">💡</span>
+          <p style="font-size:13px;color:rgba(255,255,255,0.45);line-height:1.6;">The skill isn't coding anymore — it's <strong style="color:rgba(255,255,255,0.7)">knowing what to ask for</strong> and recognizing when it's right. That's a skill you already have.</p>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -273,7 +502,6 @@
 <section id="p4">
   <div class="split-wrap">
     <div class="split-left">
-      <div class="page-num">04</div>
       <div class="chapter-label">Claude Code</div>
       <h2>You don't need a terminal. You don't need VS Code.</h2>
       <p>Claude Code used to be a tool only developers could use — living in the command line, requiring installs and technical setup. That's changed.</p>
@@ -373,7 +601,6 @@
 <section id="p7" style="background:#f5f0e8;">
   <div class="split-wrap">
     <div class="split-left" style="background:#1a3a2a;">
-      <div class="page-num" style="color:rgba(255,255,255,0.1)">07</div>
       <div class="chapter-label" style="color:#4ade80;">Web Apps</div>
       <h2 style="color:#fff;">Build in a browser.<br/>No setup required.</h2>
       <p style="color:rgba(255,255,255,0.7)">Web apps run in a browser — on any phone, laptop, or tablet. Claude Code's Desktop App can build these with zero technical setup on your end.</p>
@@ -442,7 +669,6 @@
 <section id="p9" style="background:var(--cream);">
   <div class="split-wrap">
     <div class="split-left" style="background:#1a1a2e;">
-      <div class="page-num" style="color:rgba(255,255,255,0.08)">09</div>
       <div class="chapter-label gold-label">The App</div>
       <h2 style="color:var(--cream);">The Mental<br/>Load Dump</h2>
       <p style="color:rgba(245,240,232,0.65)">Every busy mom carries a running list in her head that never stops. Soccer pickup, dentist call, permission slip, out of milk, RSVP due Friday...</p>
@@ -526,7 +752,7 @@
     <div style="font-size:30px;margin-bottom:28px;opacity:0.6;">✦</div>
     <h2 style="font-family:'Playfair Display',serif;font-size:clamp(34px,6vw,60px);color:var(--cream);line-height:1.1;margin-bottom:22px;letter-spacing:-1px;">The best time to start<br/>was yesterday.<br/>The next best time<br/>is <em style="color:var(--gold);font-style:italic;">now.</em></h2>
     <p style="font-size:16px;color:rgba(245,240,232,0.5);line-height:1.8;font-weight:300;margin-bottom:44px;">AI won't replace you. But someone who knows how to use AI might. The good news: it takes about 20 minutes to go from zero to genuinely useful. Start tonight.</p>
-    <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:1px;">claude.ai</div>
+    <a href="https://reginaflores.github.io/AIConsulting/" target="_blank" style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold);letter-spacing:1px;text-decoration:none;border-bottom:1px solid rgba(201,168,76,0.4);padding-bottom:2px;">ReginaFloresMir.ai</a>
   </div>
 </section>
 
@@ -542,12 +768,167 @@
       if (entry.isIntersecting) {
         const i = Array.from(sections).indexOf(entry.target);
         dots.forEach((d, j) => d.classList.toggle('active', j === i));
-        counter.textContent = String(i + 1).padStart(2, '0') + ' / 11';
+        counter.textContent = String(i + 1).padStart(2, '0') + ' / 15';
       }
     });
   }, { threshold: 0.5 });
 
   sections.forEach(s => observer.observe(s));
 </script>
+
+<script type="text/babel" data-presets="react">
+  const { useState: useStateT } = React;
+
+  const platforms = [
+    { category: "Text & Chat", name: "Claude", company: "Anthropic", free: true, paid: true, highlight: "Safety-focused, long docs & deep analysis" },
+    { category: "Text & Chat", name: "ChatGPT", company: "OpenAI", free: true, paid: true, highlight: "Most popular, huge ecosystem & plugins" },
+    { category: "Text & Chat", name: "Gemini", company: "Google", free: true, paid: true, highlight: "Google Workspace integration, real-time search" },
+    { category: "Text & Chat", name: "Copilot", company: "Microsoft", free: true, paid: true, highlight: "Built into Office 365 & Windows" },
+    { category: "Text & Chat", name: "Grok", company: "xAI", free: true, paid: true, highlight: "Integrated with X (Twitter), unfiltered tone" },
+    { category: "Text & Chat", name: "DeepSeek", company: "DeepSeek (China)", free: true, paid: false, highlight: "Powerful open-source model, caused major buzz" },
+    { category: "Text & Chat", name: "Meta AI", company: "Meta", free: true, paid: false, highlight: "Built into WhatsApp, Instagram, Facebook" },
+    { category: "Text & Chat", name: "Mistral", company: "Mistral AI", free: true, paid: true, highlight: "Leading European open-source model" },
+    { category: "Text & Chat", name: "Perplexity", company: "Perplexity AI", free: true, paid: true, highlight: "AI search engine with cited sources" },
+    { category: "Text & Chat", name: "Pi", company: "Inflection AI", free: true, paid: false, highlight: "Emotional, coaching-focused conversations" },
+    { category: "Text & Chat", name: "LLaMA", company: "Meta", free: true, paid: false, highlight: "Open source, run locally on your computer" },
+    { category: "Text & Chat", name: "Command R", company: "Cohere", free: false, paid: true, highlight: "Enterprise RAG & business workflows" },
+    { category: "Image", name: "DALL·E 3", company: "OpenAI", free: false, paid: true, highlight: "Inside ChatGPT, follows prompts precisely" },
+    { category: "Image", name: "Midjourney", company: "Midjourney", free: false, paid: true, highlight: "Best artistic & cinematic quality" },
+    { category: "Image", name: "Stable Diffusion", company: "Stability AI", free: true, paid: true, highlight: "Open source, highly customizable" },
+    { category: "Image", name: "Adobe Firefly", company: "Adobe", free: true, paid: true, highlight: "Commercially safe, built into Photoshop" },
+    { category: "Image", name: "Canva AI", company: "Canva", free: true, paid: true, highlight: "Easy design for non-designers" },
+    { category: "Image", name: "Ideogram", company: "Ideogram", free: true, paid: true, highlight: "Best at text inside images (logos, posters)" },
+    { category: "Image", name: "Leonardo AI", company: "Leonardo", free: true, paid: true, highlight: "Game art, characters & concept art" },
+    { category: "Image", name: "Imagen", company: "Google", free: false, paid: true, highlight: "Google's image model inside Gemini" },
+    { category: "Image", name: "Bing Image Creator", company: "Microsoft", free: true, paid: false, highlight: "Free DALL·E access via Bing" },
+    { category: "Image", name: "Grok Aurora", company: "xAI", free: true, paid: true, highlight: "Built into Grok on X platform" },
+    { category: "Video", name: "Sora", company: "OpenAI", free: false, paid: true, highlight: "Photorealistic, long coherent clips" },
+    { category: "Video", name: "Runway", company: "Runway", free: true, paid: true, highlight: "Pro-grade tools used by filmmakers" },
+    { category: "Video", name: "Pika", company: "Pika Labs", free: true, paid: true, highlight: "Fun, beginner-friendly short clips" },
+    { category: "Video", name: "Kling", company: "Kuaishou", free: true, paid: true, highlight: "High-quality realistic motion" },
+    { category: "Video", name: "Luma Dream Machine", company: "Luma AI", free: true, paid: true, highlight: "Stunning quality, popular free tier" },
+    { category: "Video", name: "Google Veo", company: "Google", free: false, paid: true, highlight: "Sora competitor, inside Gemini" },
+    { category: "Video", name: "Synthesia", company: "Synthesia", free: false, paid: true, highlight: "AI avatar presenters for training videos" },
+    { category: "Video", name: "HeyGen", company: "HeyGen", free: true, paid: true, highlight: "Avatar & talking-head videos" },
+    { category: "Audio & Music", name: "Suno", company: "Suno", free: true, paid: true, highlight: "Full songs from text — any genre" },
+    { category: "Audio & Music", name: "Udio", company: "Udio", free: true, paid: true, highlight: "High-fidelity music generation" },
+    { category: "Audio & Music", name: "ElevenLabs", company: "ElevenLabs", free: true, paid: true, highlight: "Voice cloning & realistic text-to-speech" },
+    { category: "Audio & Music", name: "Murf", company: "Murf AI", free: true, paid: true, highlight: "Voiceovers for videos & presentations" },
+    { category: "Audio & Music", name: "Descript", company: "Descript", free: true, paid: true, highlight: "Podcast & video editing with AI voice" },
+    { category: "Coding", name: "GitHub Copilot", company: "GitHub / Microsoft", free: true, paid: true, highlight: "Inline code suggestions in VS Code" },
+    { category: "Coding", name: "Cursor", company: "Cursor", free: true, paid: true, highlight: "AI-first code editor, very popular" },
+    { category: "Coding", name: "Claude Code", company: "Anthropic", free: false, paid: true, highlight: "Terminal-based agentic coding" },
+    { category: "Coding", name: "Replit AI", company: "Replit", free: true, paid: true, highlight: "Build & deploy apps in the browser" },
+    { category: "Coding", name: "Tabnine", company: "Tabnine", free: true, paid: true, highlight: "Privacy-focused code completion" },
+    { category: "Coding", name: "v0", company: "Vercel", free: true, paid: true, highlight: "Generate React UI from text prompts" },
+    { category: "Productivity", name: "Claude Cowork", company: "Anthropic", free: false, paid: true, highlight: "Desktop tool for non-developers to automate file & task management" },
+    { category: "Productivity", name: "Notion AI", company: "Notion", free: false, paid: true, highlight: "Summarize, write & search inside Notion" },
+    { category: "Productivity", name: "Grammarly AI", company: "Grammarly", free: true, paid: true, highlight: "Writing assistant across all your apps" },
+    { category: "Productivity", name: "Otter.ai", company: "Otter", free: true, paid: true, highlight: "Meeting transcription & summaries" },
+    { category: "Productivity", name: "Jasper", company: "Jasper", free: false, paid: true, highlight: "Marketing copy & content at scale" },
+    { category: "Productivity", name: "Harvey", company: "Harvey", free: false, paid: true, highlight: "AI for lawyers & legal workflows" },
+    { category: "Productivity", name: "Glean", company: "Glean", free: false, paid: true, highlight: "Enterprise AI search across all your tools" },
+  ];
+
+  const categoryMeta = {
+    "Text & Chat":   { icon: "💬", color: "#6C63FF" },
+    "Image":         { icon: "🎨", color: "#F59E0B" },
+    "Video":         { icon: "🎬", color: "#EF4444" },
+    "Audio & Music": { icon: "🎵", color: "#10B981" },
+    "Coding":        { icon: "💻", color: "#3B82F6" },
+    "Productivity":  { icon: "⚡", color: "#8B5CF6" },
+  };
+
+  const cats = Object.keys(categoryMeta);
+
+  function PlatformTable() {
+    const [activeCategory, setActiveCategory] = useStateT("All");
+    const [search, setSearch] = useStateT("");
+
+    const filtered = platforms.filter(p => {
+      const matchCat = activeCategory === "All" || p.category === activeCategory;
+      const matchSearch = search === "" ||
+        p.name.toLowerCase().includes(search.toLowerCase()) ||
+        p.company.toLowerCase().includes(search.toLowerCase()) ||
+        p.highlight.toLowerCase().includes(search.toLowerCase());
+      return matchCat && matchSearch;
+    });
+
+    const grouped = cats.reduce((acc, cat) => {
+      const items = filtered.filter(p => p.category === cat);
+      if (items.length) acc[cat] = items;
+      return acc;
+    }, {});
+
+    return (
+      <div style={{ fontFamily: "Georgia, 'Times New Roman', serif", background: "#0F0F1A", minHeight: "100vh", color: "#E8E8F0", padding: "40px 24px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
+          <div style={{ fontSize: 11, letterSpacing: 4, color: "#6C63FF", textTransform: "uppercase", fontFamily: "monospace", marginBottom: 8 }}>Reference Guide</div>
+          <h1 style={{ margin: "0 0 6px", fontSize: "clamp(24px,4vw,38px)", fontWeight: "normal", letterSpacing: -1, color: "#FFFFFF" }}>Major AI Platforms</h1>
+          <p style={{ margin: "0 0 24px", color: "#7777AA", fontSize: 13, fontStyle: "italic" }}>{platforms.length} platforms across {cats.length} categories — 2025</p>
+
+          <div style={{ position: "relative", marginBottom: 18 }}>
+            <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", fontSize: 14 }}>🔍</span>
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search platforms, companies, or use cases..."
+              style={{ width: "100%", padding: "10px 16px 10px 40px", background: "#1A1A2E", border: "1px solid #2D2D4E", borderRadius: 10, color: "#E8E8F0", fontSize: 13, fontFamily: "inherit", outline: "none" }} />
+          </div>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 24 }}>
+            {["All", ...cats].map(cat => {
+              const isActive = activeCategory === cat;
+              const meta = categoryMeta[cat];
+              return (
+                <button key={cat} onClick={() => setActiveCategory(cat)}
+                  style={{ cursor: "pointer", padding: "6px 14px", borderRadius: 20, fontSize: 12, background: isActive ? (meta ? meta.color : "#6C63FF") : "#1A1A2E", color: isActive ? "#fff" : "#9999BB", border: `1px solid ${isActive ? "transparent" : "#2D2D4E"}`, fontWeight: isActive ? 600 : 400, fontFamily: "inherit", transition: "all 0.2s" }}>
+                  {meta ? `${meta.icon} ${cat}` : "✦ All"}
+                </button>
+              );
+            })}
+          </div>
+
+          <div style={{ fontSize: 11, color: "#55557A", marginBottom: 14, fontFamily: "monospace" }}>Showing {filtered.length} of {platforms.length} platforms</div>
+
+          {Object.entries(grouped).map(([cat, items]) => {
+            const meta = categoryMeta[cat];
+            return (
+              <div key={cat} style={{ marginBottom: 32 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ fontSize: 18 }}>{meta.icon}</span>
+                  <h2 style={{ margin: 0, fontSize: 16, fontWeight: 600, color: meta.color }}>{cat}</h2>
+                  <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, ${meta.color}44, transparent)` }} />
+                  <span style={{ fontSize: 11, color: "#55557A", fontFamily: "monospace" }}>{items.length} platforms</span>
+                </div>
+                <div style={{ borderRadius: 10, overflow: "hidden", border: "1px solid #2D2D4E" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 2.6fr 0.5fr 0.5fr", background: "#13132A", padding: "8px 16px", borderBottom: "1px solid #2D2D4E", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", color: "#55557A", fontFamily: "monospace", gap: 12 }}>
+                    <div>Platform</div><div>Company</div><div>Best For</div>
+                    <div style={{ textAlign: "center" }}>Free</div><div style={{ textAlign: "center" }}>Paid</div>
+                  </div>
+                  {items.map((p, i) => (
+                    <div key={p.name} style={{ display: "grid", gridTemplateColumns: "1.4fr 1.2fr 2.6fr 0.5fr 0.5fr", padding: "10px 16px", gap: 12, alignItems: "center", background: i % 2 === 0 ? "#0F0F1A" : "#111122", borderBottom: i < items.length - 1 ? "1px solid #1E1E35" : "none" }}>
+                      <div style={{ fontWeight: 600, fontSize: 13, color: "#FFFFFF" }}>{p.name}</div>
+                      <div style={{ fontSize: 12, color: "#8888AA" }}>{p.company}</div>
+                      <div style={{ fontSize: 12, color: "#AAAACC", lineHeight: 1.4 }}>{p.highlight}</div>
+                      <div style={{ textAlign: "center", fontSize: 14, color: p.free ? "#10B981" : "#444466" }}>{p.free ? "✓" : "—"}</div>
+                      <div style={{ textAlign: "center", fontSize: 14, color: p.paid ? "#6C63FF" : "#444466" }}>{p.paid ? "✓" : "—"}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+
+          {filtered.length === 0 && <div style={{ textAlign: "center", padding: "60px 0", color: "#55557A", fontSize: 15 }}>No platforms match your search.</div>}
+
+          <div style={{ marginTop: 32, paddingTop: 18, borderTop: "1px solid #2D2D4E", textAlign: "center", fontSize: 11, color: "#44445A", fontStyle: "italic" }}>
+            The AI landscape changes weekly. This covers the most widely used platforms as of early 2025.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("table-root")).render(<PlatformTable />);
+</script>
+
 </body>
 </html>
