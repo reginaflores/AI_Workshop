@@ -3,11 +3,14 @@
 
 # **AI Workshop**
 
-##Worskhop 1: March 13, 2026
+## **Workshop 1: March 13, 2026**
 Workshop Slides:
-https://reginaflores.github.io/AI_Workshop/slides.html
+https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/slides.html
+
+Homework:
+https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/homework.html
 
 AI Platform Overview:
-https://reginaflores.github.io/AI_Workshop/platforms.html
+https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/platforms.html
 
 Workshop 2: March 19th, 2026
