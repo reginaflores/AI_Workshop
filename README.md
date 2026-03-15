@@ -9,11 +9,11 @@ In workshop 1 we discussed the development of machine learning to our current AI
 Workshop Slides:
 https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/slides.html
 
-Homework:
-https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/homework.html
-
 AI Platform Overview:
 https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/platforms.html
+
+Homework:
+https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/homework.html
 
 ## **Workshop 2: March 19th, 2026**
 In workshop 2 we will look at iOS native apps. We will use Claude Code, Terminal and XCode.
@@ -24,5 +24,3 @@ https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_AP
 Homework:
 https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_APIs/homework.html
 
-AI Platform Overview:
-https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_APIs/platforms.html
