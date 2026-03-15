@@ -4,6 +4,8 @@
 # **AI Workshop**
 
 ## **Workshop 1: March 13, 2026**
+In workshop 1 we discussed the development of machine learning to our current AI landscape. We looked into various AI platforms. We made a simple web app using Claude chat.
+
 Workshop Slides:
 https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/slides.html
 
