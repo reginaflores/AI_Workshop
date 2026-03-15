@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Workshop — Homework</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1a1a2e;
+      --cream: #f5f0e8;
+      --gold: #c9a84c;
+      --rose: #c4445a;
+      --slate: #4a5568;
+      --green: #2d6a4f;
+    }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      padding: 60px 24px 100px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      margin-bottom: 56px;
+    }
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(36px, 6vw, 58px);
+      color: var(--ink);
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+    .header h1 em { color: var(--rose); font-style: italic; }
+    .header p {
+      font-size: 15px;
+      color: var(--slate);
+      line-height: 1.8;
+      font-weight: 300;
+      max-width: 520px;
+    }
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 24px 0;
+    }
+
+    /* PARTS */
+    .part {
+      margin-bottom: 48px;
+    }
+    .part-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .part-badge {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .part-1 .part-badge { background: rgba(201,168,76,0.15); color: var(--gold); border: 1px solid rgba(201,168,76,0.3); }
+    .part-2 .part-badge { background: rgba(196,68,90,0.1); color: var(--rose); border: 1px solid rgba(196,68,90,0.25); }
+    .part-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3vw, 30px);
+      color: var(--ink);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    /* TASKS */
+    .tasks {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .task {
+      background: #fff;
+      border: 1px solid #e8e4dc;
+      border-radius: 14px;
+      padding: 22px 24px;
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .task-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .part-1 .task-num { background: rgba(201,168,76,0.15); color: var(--gold); }
+    .part-2 .task-num { background: rgba(196,68,90,0.1); color: var(--rose); }
+    .task-body h3 {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+    .task-body p {
+      font-size: 13px;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+    .task-body a {
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201,168,76,0.4);
+    }
+    .task-body a:hover { border-bottom-color: var(--gold); }
+
+    /* TIP BOX */
+    .tip-box {
+      margin-top: 14px;
+      padding: 14px 18px;
+      background: rgba(201,168,76,0.06);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      font-size: 12px;
+      color: var(--slate);
+      line-height: 1.6;
+    }
+    .tip-box strong { color: var(--ink); }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 64px;
+      padding-top: 28px;
+      border-top: 1px solid #e0dbd1;
+      text-align: center;
+    }
+    .footer p {
+      font-size: 13px;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .footer a {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(201,168,76,0.4);
+      padding-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="eyebrow">AI Essentials Workshop</div>
+      <h1>Your<br/><em>homework.</em></h1>
+      <div class="divider"></div>
+      <p>Two parts. No pressure — just exploration. Use Claude to help you with anything you get stuck on. That's exactly what it's there for.</p>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="part part-1">
+      <div class="part-label">
+        <span class="part-badge">Part 1</span>
+      </div>
+      <h2 class="part-title">Publish your Calendar App to the web.</h2>
+      <div class="tasks">
+
+        <div class="task">
+          <div class="task-num">1</div>
+          <div class="task-body">
+            <h3>Research GitHub and set up a free account</h3>
+            <p>GitHub is where developers (and now non-developers) store and publish their projects. It's free, and it's where your Calendar App will live. Go to <a href="https://github.com" target="_blank">github.com</a> and create an account.</p>
+            <div class="tip-box"><strong>Ask Claude:</strong> "Explain GitHub to me like I've never heard of it. What is it and why do I need it?"</div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="task-num">2</div>
+          <div class="task-body">
+            <h3>Push your Calendar App to GitHub</h3>
+            <p>Once you have an account, create a new repository and upload the files Claude Code built for you. Don't worry about the technical steps — Claude Code can walk you through this.</p>
+            <div class="tip-box"><strong>Ask Claude Code:</strong> "Help me push my calendar app to a new GitHub repository."</div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="task-num">3</div>
+          <div class="task-body">
+            <h3>Publish it with GitHub Pages</h3>
+            <p>GitHub Pages is a free feature that turns your repository into a live website — instantly. Once enabled, your Calendar App will have a real URL you can share with anyone.</p>
+            <div class="tip-box"><strong>In your repo:</strong> go to Settings → Pages → select your main branch → Save. Your site will be live at <strong>yourusername.github.io/your-repo-name</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="part part-2">
+      <div class="part-label">
+        <span class="part-badge">Part 2</span>
+      </div>
+      <h2 class="part-title">Try building a native iOS app.</h2>
+      <div class="tasks">
+
+        <div class="task">
+          <div class="task-num">1</div>
+          <div class="task-body">
+            <h3>Download Xcode</h3>
+            <p>Xcode is Apple's free development tool — required to build and run iOS apps. It's only available on Mac. Open the App Store, search "Xcode," and install it. Fair warning: it's a large download (~15GB).</p>
+            <div class="tip-box"><strong>Note:</strong> This is Mac-only. If you're on Windows, skip to Part 1 and explore the web app path instead.</div>
+          </div>
+        </div>
+
+        <div class="task">
+          <div class="task-num">2</div>
+          <div class="task-body">
+            <h3>Build a simple app with Claude Code</h3>
+            <p>Once Xcode is installed, open Claude Code and describe a simple app idea — something small and useful to you. A tip calculator. A mood tracker. A daily quote app. It doesn't need to be impressive. It needs to be <em>yours</em>.</p>
+            <div class="tip-box"><strong>Ask Claude Code:</strong> "I have Xcode installed. Help me build a simple iOS app that [your idea]. I'm a complete beginner — walk me through every step."</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Questions? Reach out.</p>
+      <a href="https://reginaflores.github.io/AIConsulting/" target="_blank">ReginaFloresMir.ai</a>
+    </div>
+
+  </div>
+</body>
+</html>
