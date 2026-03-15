@@ -15,4 +15,13 @@ https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/homework
 AI Platform Overview:
 https://reginaflores.github.io/AI_Workshop/Workshop1_AI_Basics_Web_Apps/platforms.html
 
-Workshop 2: March 19th, 2026
+## **Workshop 2: March 19th, 2026**
+
+Workshop Slides:
+https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_APIs/slides.html
+
+Homework:
+https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_APIs/homework.html
+
+AI Platform Overview:
+https://reginaflores.github.io/AI_Workshop/Workshop2_iOS_Apps_Claude_Code_And_APIs/platforms.html
