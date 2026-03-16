@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workshop 2 — Homework</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a1a;
+  --deep: #0f0b2e;
+  --violet: #7c3aed;
+  --violet-light: #a78bfa;
+  --amber: #f59e0b;
+  --emerald: #10b981;
+  --pink: #ec4899;
+  --white: #ffffff;
+  --offwhite: #f8f7ff;
+  --gray-400: #9ca3af;
+  --gray-600: #6b7280;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  background: var(--deep);
+  color: var(--white);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── HEADER ── */
+header {
+  padding: 60px 0 0;
+  text-align: left;
+}
+header .workshop-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--violet-light);
+  margin-bottom: 48px;
+  display: block;
+}
+header h1 {
+  font-size: clamp(48px, 8vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+}
+header h1 em {
+  font-style: italic;
+  font-weight: 300;
+}
+header .intro {
+  font-size: 18px;
+  color: var(--gray-400);
+  line-height: 1.6;
+  max-width: 560px;
+  margin-bottom: 64px;
+}
+
+/* ── PART LABEL ── */
+.part-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 12px;
+  display: block;
+}
+.part-title {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 40px;
+}
+
+/* ── STEP CARDS ── */
+.step {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+.step-num {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--violet-light);
+  flex-shrink: 0;
+}
+.step-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+.step-content p {
+  font-size: 15px;
+  color: var(--gray-400);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.step-content .claude-prompt {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  background: rgba(124, 58, 237, 0.08);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  border-radius: 8px;
+  padding: 14px 18px;
+  color: var(--violet-light);
+  line-height: 1.6;
+  margin-top: 12px;
+}
+.step-content .claude-prompt strong {
+  color: var(--amber);
+  font-weight: 700;
+}
+
+/* ── BONUS CALLOUT ── */
+.bonus-callout {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin: 20px 0 12px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.bonus-callout .icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+.bonus-callout p {
+  font-size: 14px;
+  color: var(--gray-400);
+  line-height: 1.6;
+}
+.bonus-callout strong {
+  color: var(--amber);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  width: 60px;
+  height: 3px;
+  background: var(--violet);
+  margin: 64px 0;
+  border-radius: 2px;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 80px 0 48px;
+  text-align: left;
+}
+footer .q {
+  font-size: 15px;
+  color: var(--gray-600);
+  margin-bottom: 8px;
+}
+footer a {
+  color: var(--violet-light);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+footer a:hover {
+  color: var(--white);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <span class="workshop-label fade-in">AI Essentials Workshop</span>
+    <h1 class="fade-in">Your <em>homework.</em></h1>
+    <p class="intro fade-in">Three parts. No pressure — just exploration. Use Claude Code to help you with anything you get stuck on. That's exactly what it's there for.</p>
+  </header>
+
+  <!-- ═══════════════════ PART 1 ═══════════════════ -->
+  <span class="part-label fade-in">Part 1</span>
+  <h2 class="part-title fade-in">Make your own app.</h2>
+
+  <div class="step fade-in">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Come up with an app idea</h3>
+      <p>Think of something you'd actually want on your phone. A habit tracker, a recipe organizer, a journal, a countdown timer — anything. The simpler the better for your first solo build.</p>
+      <div class="claude-prompt">
+        <strong>Ask Claude Code:</strong> "I want to build an iOS app that does [your idea]. Create a SwiftUI Xcode project for me."
+      </div>
+    </div>
+  </div>
+
+  <div class="step fade-in">
+    <div class="step-num">2</div>
+    <div class="step-content">
+      <h3>Build it with Claude Code</h3>
+      <p>Open Terminal, navigate to a new folder, type <code style="background: rgba(124,58,237,0.12); padding: 2px 6px; border-radius: 4px; font-family: 'Space Mono', monospace; font-size: 13px;">claude</code>, and start describing what you want. Iterate until you're happy — change colors, add screens, fix bugs. You're the creative director.</p>
+    </div>
+  </div>
+
+  <div class="step fade-in">
+    <div class="step-num">3</div>
+    <div class="step-content">
+      <h3>Push it to GitHub</h3>
+      <p>Once you're happy with your app, save it to GitHub so it's backed up and shareable.</p>
+      <div class="claude-prompt">
+        <strong>Ask Claude Code:</strong> "Initialize a git repo and push this project to a new GitHub repository called my-app."
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ PART 2 ═══════════════════ -->
+  <span class="part-label fade-in">Part 2</span>
+  <h2 class="part-title fade-in">Connect an API.</h2>
+
+  <div class="step fade-in">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Add an API to your app</h3>
+      <p>Make your app pull in real data from the outside world. Use any free API — weather, quotes, news, recipes, art, trivia. Browse <a href="https://github.com/public-apis/public-apis" target="_blank" style="color: var(--violet-light);">this list of free APIs</a> for inspiration.</p>
+      <div class="claude-prompt">
+        <strong>Ask Claude Code:</strong> "Add a feature to my app that shows [data you want] using a free API."
+      </div>
+    </div>
+  </div>
+
+  <div class="step fade-in">
+    <div class="step-num">⭐</div>
+    <div class="step-content">
+      <h3>Bonus: Use an API that requires a key</h3>
+      <p>Some APIs need an API key — a unique code that identifies you. For bonus points, find an API that requires one (like OpenWeather, Unsplash, or the Claude API itself) and figure out how to handle it in your project.</p>
+      <div class="bonus-callout">
+        <div class="icon">🔑</div>
+        <div>
+          <p><strong>Things to figure out:</strong> How do you get an API key? Where do you store it so it's not exposed in your code? What happens if someone gets your key? Ask Claude Code to help — it knows how to store keys safely using environment variables or .env files, and how to add them to your .gitignore so they don't end up on GitHub.</p>
+        </div>
+      </div>
+      <div class="claude-prompt">
+        <strong>Ask Claude Code:</strong> "I have an API key for [service]. Help me add it to my project securely so it doesn't get pushed to GitHub."
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ═══════════════════ PART 3 ═══════════════════ -->
+  <span class="part-label fade-in">Part 3</span>
+  <h2 class="part-title fade-in">Get it on your phone.</h2>
+
+  <div class="step fade-in">
+    <div class="step-num">1</div>
+    <div class="step-content">
+      <h3>Install your app on your iPhone</h3>
+      <p>Plug your iPhone into your Mac, enable Developer Mode, select your phone in Xcode, and hit Cmd + R. Your app — the one you built — running on your actual phone.</p>
+      <div class="claude-prompt">
+        <strong>Ask Claude Code:</strong> "Walk me through the steps to run my Xcode project on my iPhone."
+      </div>
+    </div>
+  </div>
+
+  <div class="step fade-in">
+    <div class="step-num">⭐</div>
+    <div class="step-content">
+      <h3>Bonus: Explore the App Store path</h3>
+      <p>Research what it takes to publish an app to the App Store or TestFlight. You don't need to actually do it — just go through the steps and understand the process. What does the $99/year Apple Developer Program get you? What's the review process like?</p>
+      <div class="claude-prompt">
+        <strong>Ask Claude:</strong> "Explain the full process of submitting an iOS app to the App Store. What do I need, and what are the steps?"
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="fade-in">
+    <p class="q">Questions? Reach out.</p>
+    <a href="https://reginaflores.ai" target="_blank">reginafloresmir.ai</a>
+  </footer>
+
+</div>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

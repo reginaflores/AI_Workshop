@@ -1,0 +1,1666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop 2: From Chat to Code — Building iOS Apps with Claude Code</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0a0a1a;
+  --deep: #0f0b2e;
+  --mid: #1a1145;
+  --violet: #7c3aed;
+  --violet-light: #a78bfa;
+  --violet-glow: rgba(124, 58, 237, 0.15);
+  --amber: #f59e0b;
+  --emerald: #10b981;
+  --pink: #ec4899;
+  --rose: #f43f5e;
+  --sky: #38bdf8;
+  --white: #ffffff;
+  --offwhite: #f8f7ff;
+  --gray-100: #f3f2fa;
+  --gray-200: #e8e5f5;
+  --gray-400: #9ca3af;
+  --gray-600: #6b7280;
+  --gray-800: #1f2937;
+  --terminal-bg: #0d1117;
+  --terminal-green: #7ee787;
+  --terminal-blue: #a5d6ff;
+  --terminal-purple: #d2a8ff;
+  --terminal-gray: #8b949e;
+  --section-pad: clamp(80px, 12vh, 140px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  color: var(--ink);
+  background: var(--offwhite);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 26, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+  transition: all 0.3s ease;
+}
+nav .logo {
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: var(--violet-light);
+  letter-spacing: 0.05em;
+}
+nav .logo span { color: var(--amber); }
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+nav ul li a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: color 0.2s;
+}
+nav ul li a:hover { color: var(--white); }
+
+@media (max-width: 768px) {
+  nav ul { display: none; }
+  nav { padding: 14px 20px; }
+}
+
+/* ── SECTIONS ── */
+section {
+  padding: var(--section-pad) clamp(24px, 5vw, 80px);
+  position: relative;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  background: var(--deep);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%);
+  top: -200px; left: -100px;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236,72,153,0.1), transparent 70%);
+  bottom: -150px; right: -100px;
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero .badge {
+  display: inline-block;
+  background: var(--violet);
+  color: var(--white);
+  padding: 8px 20px;
+  border-radius: 100px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  animation: fadeDown 0.6s ease both;
+}
+.hero h1 {
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  animation: fadeDown 0.6s ease 0.1s both;
+}
+.hero h1 em {
+  font-style: normal;
+  background: linear-gradient(135deg, var(--violet-light), var(--pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .subtitle {
+  font-size: clamp(18px, 2.5vw, 24px);
+  color: var(--violet-light);
+  font-weight: 300;
+  margin-bottom: 40px;
+  animation: fadeDown 0.6s ease 0.2s both;
+}
+.hero .meta {
+  color: var(--gray-400);
+  font-size: 15px;
+  animation: fadeDown 0.6s ease 0.3s both;
+}
+.hero .meta strong { color: var(--white); font-weight: 500; }
+.hero .icon-stack {
+  position: absolute;
+  right: clamp(20px, 8vw, 120px);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeLeft 0.8s ease 0.4s both;
+}
+.hero .icon-stack .icon-circle {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+.hero .icon-stack .icon-circle:hover {
+  border-color: var(--violet);
+  background: rgba(124,58,237,0.1);
+  transform: scale(1.1);
+}
+.hero .icon-stack .icon-circle svg { color: rgba(255,255,255,0.85); }
+@media (max-width: 900px) {
+  .hero .icon-stack { display: none; }
+}
+
+/* ── SECTION TITLES ── */
+.section-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 12px;
+  display: block;
+}
+.section-title {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 20px;
+}
+.section-title.light { color: var(--white); }
+.section-subtitle {
+  font-size: 18px;
+  color: var(--gray-600);
+  font-weight: 300;
+  max-width: 650px;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+.section-subtitle.light { color: var(--gray-400); }
+
+/* ── DARK SECTIONS ── */
+.dark-section {
+  background: var(--deep);
+  color: var(--white);
+}
+.dark-section .section-label { color: var(--amber); }
+
+/* ── RECAP CARDS ── */
+.recap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+.recap-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  border-left: 4px solid var(--violet);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.recap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+}
+.recap-card .icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  background: var(--violet-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+.recap-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.recap-card p {
+  color: var(--gray-600);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* ── AGENDA ── */
+.agenda-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  counter-reset: agenda;
+}
+.agenda-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 28px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: all 0.3s ease;
+  counter-increment: agenda;
+}
+.agenda-item:hover {
+  background: rgba(124,58,237,0.08);
+  border-color: rgba(124,58,237,0.2);
+  transform: translateX(8px);
+}
+.agenda-item .num {
+  font-family: 'Space Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--amber);
+  min-width: 50px;
+}
+.agenda-item .text h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.agenda-item .text p {
+  font-size: 14px;
+  color: var(--gray-400);
+}
+
+/* ── COMPARISON ── */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+}
+@media (max-width: 768px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .compare-arrow { transform: rotate(90deg); }
+}
+.compare-card {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+.compare-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+}
+.compare-card.chat::before { background: var(--violet-light); }
+.compare-card.code::before { background: var(--violet); }
+.compare-card .tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 8px;
+}
+.compare-card h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.compare-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.compare-card ul li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--gray-600);
+}
+.compare-card ul li .check {
+  color: var(--emerald);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.compare-arrow {
+  font-size: 32px;
+  color: var(--amber);
+  text-align: center;
+}
+
+/* ── TERMINAL ── */
+.terminal {
+  background: var(--terminal-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  margin: 32px 0;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.terminal-bar {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  background: rgba(255,255,255,0.05);
+}
+.terminal-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.terminal-dot.red { background: #ff5f57; }
+.terminal-dot.yellow { background: #febc2e; }
+.terminal-dot.green { background: #28c840; }
+.terminal-body {
+  padding: 20px 24px;
+}
+.terminal-body .line { margin-bottom: 4px; }
+.terminal-body .prompt { color: var(--terminal-green); }
+.terminal-body .user-input { color: var(--terminal-purple); }
+.terminal-body .output { color: var(--terminal-gray); }
+.terminal-body .success { color: var(--terminal-green); }
+.terminal-body .comment { color: var(--terminal-gray); font-style: italic; }
+.terminal-body .spacer { height: 12px; }
+
+/* ── FEATURE GRID ── */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.feature-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+}
+.feature-card:hover { transform: translateY(-4px); }
+.feature-card .icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.feature-card .icon.violet { background: var(--violet-glow); }
+.feature-card .icon.amber { background: rgba(245,158,11,0.12); }
+.feature-card .icon.emerald { background: rgba(16,185,129,0.12); }
+.feature-card .icon.pink { background: rgba(236,72,153,0.12); }
+.feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.feature-card p { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+/* ── FLOW STEPS ── */
+.flow-container {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.flow-step {
+  text-align: center;
+  flex: 1;
+  min-width: 180px;
+  max-width: 220px;
+}
+.flow-step .circle {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--white);
+  margin: 0 auto 16px;
+}
+.flow-step h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+.flow-step p { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  padding-top: 24px;
+  color: var(--amber);
+  font-size: 24px;
+}
+@media (max-width: 768px) {
+  .flow-arrow { display: none; }
+  .flow-container { flex-direction: column; align-items: center; }
+}
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--violet-glow);
+  border: 1px solid rgba(124,58,237,0.15);
+  border-radius: 16px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+.callout .icon { font-size: 28px; flex-shrink: 0; }
+.callout p { font-size: 16px; font-weight: 500; line-height: 1.5; }
+.callout.dark {
+  background: rgba(124,58,237,0.08);
+  border-color: rgba(124,58,237,0.15);
+}
+.callout.dark p { color: var(--white); }
+
+/* ── IDEA CARDS ── */
+.idea-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.idea-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: all 0.3s ease;
+}
+.idea-card:hover {
+  background: rgba(124,58,237,0.08);
+  border-color: rgba(124,58,237,0.2);
+}
+.idea-card .emoji { font-size: 28px; }
+.idea-card p { font-size: 15px; color: rgba(255,255,255,0.8); }
+
+/* ── ITERATE ROWS ── */
+.iterate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.iterate-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+  padding: 16px 20px;
+  transition: all 0.3s ease;
+}
+.iterate-row:hover {
+  background: rgba(124,58,237,0.06);
+}
+.iterate-row .prompt {
+  font-family: 'Space Mono', monospace;
+  font-size: 13px;
+  color: var(--terminal-purple);
+}
+.iterate-row .arrow { color: var(--amber); font-size: 18px; }
+.iterate-row .result { font-size: 14px; color: var(--gray-400); }
+@media (max-width: 768px) {
+  .iterate-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .iterate-row .arrow { display: none; }
+}
+
+/* ── BREAK SLIDE ── */
+.break-section {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.break-section.violet-bg { background: var(--violet); }
+.break-section.emerald-bg { background: var(--emerald); }
+.break-section::before {
+  content: '';
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  right: -100px; bottom: -100px;
+}
+.break-section h2 {
+  font-size: clamp(40px, 7vw, 72px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+.break-section p {
+  font-size: 20px;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 8px;
+}
+.break-section .time {
+  font-family: 'Space Mono', monospace;
+  font-size: 16px;
+  color: rgba(255,255,255,0.6);
+}
+.break-section .big-icon {
+  font-size: 64px;
+  margin-bottom: 24px;
+  display: block;
+}
+
+/* ── PREREQ LIST ── */
+.prereq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.prereq-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease;
+}
+.prereq-item:hover { transform: translateX(6px); }
+.prereq-item .icon-box {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--white);
+  flex-shrink: 0;
+}
+.prereq-item h3 { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
+.prereq-item p { font-size: 13px; color: var(--gray-600); }
+
+/* ── ACHIEVEMENT LIST ── */
+.achieve-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.achieve-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--white);
+  border-radius: 14px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+.achieve-item .check-box {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: var(--emerald);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.achieve-item p { font-size: 16px; font-weight: 500; }
+
+/* ── TIPS ── */
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.tip-item {
+  display: flex;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.06);
+  align-items: flex-start;
+}
+.tip-item .tip-icon { font-size: 22px; flex-shrink: 0; padding-top: 2px; }
+.tip-item h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.tip-item p { font-size: 13px; color: var(--gray-400); line-height: 1.5; }
+
+/* ── CLOSING ── */
+.closing {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: var(--deep);
+  position: relative;
+  overflow: hidden;
+}
+.closing::before {
+  content: '';
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%);
+  top: -200px; left: -200px;
+}
+.closing::after {
+  content: '';
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236,72,153,0.08), transparent 70%);
+  bottom: -200px; right: -100px;
+}
+.closing-content { position: relative; z-index: 1; }
+.closing h2 {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  margin-bottom: 12px;
+}
+.closing h2 em {
+  font-style: normal;
+  color: var(--violet-light);
+}
+.closing h2 .amber { color: var(--amber); }
+.closing .thanks {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--white);
+  margin: 40px 0 16px;
+}
+.closing .author {
+  font-size: 16px;
+  color: rgba(255,255,255,0.7);
+}
+.closing .links {
+  font-size: 14px;
+  color: var(--gray-400);
+  margin-top: 8px;
+}
+
+/* ── XCODE FEATURES ── */
+.xcode-features {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
+}
+.xcode-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.xcode-feature .feat-icon { font-size: 24px; flex-shrink: 0; }
+.xcode-feature h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.xcode-feature p { font-size: 14px; color: var(--gray-600); line-height: 1.5; }
+
+/* ── GITHUB FEATURES ── */
+.gh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.gh-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+  transition: transform 0.3s;
+}
+.gh-card:hover { transform: translateY(-4px); }
+.gh-card .icon { font-size: 28px; margin-bottom: 14px; display: block; }
+.gh-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+.gh-card p { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translate(20px, -50%); }
+  to { opacity: 1; transform: translate(0, -50%); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">workshop<span>//</span>02</div>
+  <ul>
+    <li><a href="#recap">Recap</a></li>
+    <li><a href="#what">Claude Code</a></li>
+    <li><a href="#build">Build</a></li>
+    <li><a href="#apis">APIs</a></li>
+    <li><a href="#github">GitHub</a></li>
+    <li><a href="#wrapup">Wrap-Up</a></li>
+  </ul>
+</nav>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HERO -->
+<!-- ════════════════════════════════════════════ -->
+<section class="hero" id="top" style="display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; padding-top: 120px; padding-bottom: 60px;">
+  <div class="container hero-content" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+    <div class="badge">Workshop 2</div>
+    <h1>From Chat<br>to <em>Code</em></h1>
+    <p class="subtitle">Building iOS Apps with Claude Code</p>
+  </div>
+  <div class="meta" style="text-align: center;">
+    <a href="https://reginaflores.ai" target="_blank" style="color: inherit; text-decoration: none;">reginafloresmir.ai</a><br>
+    March 19, 2026
+  </div>
+  <div class="icon-stack" style="display:none;">
+    <div class="icon-circle">⌨️</div>
+    <div class="icon-circle">🍎</div>
+    <div class="icon-circle"><svg class="gh-octocat" viewBox="0 0 16 16" width="28" height="28" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- RECAP -->
+<!-- ════════════════════════════════════════════ -->
+<section id="recap">
+  <div class="container">
+    <span class="section-label fade-in">Looking back</span>
+    <h2 class="section-title fade-in">Workshop 1 Recap</h2>
+    <p class="section-subtitle fade-in">Last time we explored AI and built something real together.</p>
+    <div class="recap-grid">
+      <div class="recap-card fade-in">
+        <div class="icon">💡</div>
+        <h3>AI Foundations</h3>
+        <p>We explored what AI is, how large language models work, and why this moment matters for everyone — not just engineers.</p>
+      </div>
+      <div class="recap-card fade-in">
+        <div class="icon">🌐</div>
+        <h3>Hands-On with Claude Chat</h3>
+        <p>We used Claude's chat interface to build a complete HTML website — from idea to a live, working page — all through conversation.</p>
+      </div>
+      <div class="recap-card fade-in">
+        <div class="icon">🚀</div>
+        <h3>Key Takeaway</h3>
+        <p>AI is a creative partner, not just a tool. You don't need to be a developer to build things. You just need a vision.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- EVOLUTION: CHAT → CODE -->
+<!-- ════════════════════════════════════════════ -->
+<section id="evolution">
+  <div class="container">
+    <span class="section-label fade-in">The evolution</span>
+    <h2 class="section-title fade-in">From Chat to Code</h2>
+    <p class="section-subtitle fade-in">In Workshop 1 we used Claude Chat. Today we level up to Claude Code — a tool that works directly on your computer.</p>
+    <div class="compare-grid fade-in">
+      <div class="compare-card chat">
+        <div class="tag">Workshop 1</div>
+        <h3>Claude Chat</h3>
+        <ul>
+          <li><span class="check">✓</span> Conversational interface</li>
+          <li><span class="check">✓</span> Great for ideation &amp; writing</li>
+          <li><span class="check">✓</span> Builds one HTML page at a time</li>
+          <li><span class="check">✓</span> Perfect starting point</li>
+        </ul>
+      </div>
+      <div class="compare-arrow">→</div>
+      <div class="compare-card code">
+        <div class="tag">Workshop 2 — Today!</div>
+        <h3>Claude Code</h3>
+        <ul>
+          <li><span class="check">✓</span> Terminal-based AI agent</li>
+          <li><span class="check">✓</span> Reads &amp; writes real files</li>
+          <li><span class="check">✓</span> Manages entire projects</li>
+          <li><span class="check">✓</span> Runs commands for you</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT IS CLAUDE CODE -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section" id="what">
+  <div class="container">
+    <span class="section-label fade-in">Introducing</span>
+    <h2 class="section-title light fade-in">What is Claude Code?</h2>
+    <p class="section-subtitle light fade-in">An AI coding agent that lives in your terminal. Instead of copying and pasting code from a chat window, Claude Code works directly on your computer — creating files, running commands, and building entire projects.</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> claude</div>
+        <div class="spacer"></div>
+        <div class="line"><span class="user-input">&gt; Build me an iOS app for tracking my daily habits</span></div>
+        <div class="spacer"></div>
+        <div class="line"><span class="output">  Creating Xcode project structure...</span></div>
+        <div class="line"><span class="output">  Setting up SwiftUI views...</span></div>
+        <div class="line"><span class="output">  Adding habit data model...</span></div>
+        <div class="line"><span class="success">  ✓ Project ready — open in Xcode to preview</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHY CLAUDE CODE -->
+<!-- ════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <span class="section-label fade-in">Why it matters</span>
+    <h2 class="section-title fade-in">Why Claude Code?</h2>
+    <p class="section-subtitle fade-in">It turns you into a creative director with a tireless developer at your side.</p>
+    <div class="feature-grid">
+      <div class="feature-card fade-in">
+        <div class="icon violet">📱</div>
+        <h3>Build Real Apps</h3>
+        <p>Create actual Xcode projects that run on iPhones — not just mockups or wireframes.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon amber">🔧</div>
+        <h3>Handles Complexity</h3>
+        <p>It manages files, dependencies, and project structure — the hard parts you'd normally need a developer for.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon emerald">☁️</div>
+        <h3>Full Workflow</h3>
+        <p>From first idea to GitHub — Claude Code handles the entire development pipeline.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon pink">🤝</div>
+        <h3>You Stay in Control</h3>
+        <p>You describe what you want in plain English. Claude Code asks permission before every action.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HOW IT WORKS -->
+<!-- ════════════════════════════════════════════ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <span class="section-label fade-in">The loop</span>
+    <h2 class="section-title fade-in">How Claude Code Works</h2>
+    <p class="section-subtitle fade-in">A simple four-step loop you'll repeat over and over as you build.</p>
+    <div class="flow-container fade-in">
+      <div class="flow-step">
+        <div class="circle" style="background: var(--violet);">1</div>
+        <h3>You Describe</h3>
+        <p>Tell Claude what you want in plain English</p>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="circle" style="background: var(--amber);">2</div>
+        <h3>Claude Proposes</h3>
+        <p>It explains what it will do and asks for the OK</p>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="circle" style="background: var(--emerald);">3</div>
+        <h3>You Approve</h3>
+        <p>Press Y to accept or give feedback</p>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="circle" style="background: var(--pink);">4</div>
+        <h3>Claude Builds</h3>
+        <p>Creates files, runs commands, tests it</p>
+      </div>
+    </div>
+    <div class="callout fade-in">
+      <div class="icon">💡</div>
+      <p>You never need to write code yourself. You are the creative director — Claude is the developer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT YOU NEED -->
+<!-- ════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <span class="section-label fade-in">Prerequisites</span>
+    <h2 class="section-title fade-in">What You Need</h2>
+    <div class="prereq-list">
+      <div class="prereq-item fade-in">
+        <div class="icon-box" style="background: var(--ink);">🍎</div>
+        <div>
+          <h3>A Mac</h3>
+          <p>Claude Code + Xcode require macOS</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">macOS is the operating system that runs on Apple computers. It's required because Xcode (Apple's app builder) only works on Macs.</p>
+        </div>
+      </div>
+      <div class="prereq-item fade-in">
+        <div class="icon-box" style="background: #1e293b;">🖥️</div>
+        <div>
+          <h3>Terminal</h3>
+          <p>Built into every Mac — open it from Applications → Utilities → Terminal</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">Terminal is a text-based way to talk to your computer. Instead of clicking icons, you type commands. It looks like a hacker movie, but it's just another way to tell your computer what to do.</p>
+        </div>
+      </div>
+      <div class="prereq-item fade-in">
+        <div class="icon-box" style="background: var(--violet);">⌨️</div>
+        <div>
+          <h3>Node.js (v18+)</h3>
+          <p>Runtime for Claude Code — installed via terminal</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">Node.js is a program that lets you run JavaScript code on your computer (not just in a browser). Claude Code is built with it, so it needs Node.js to work.</p>
+        </div>
+      </div>
+      <div class="prereq-item fade-in">
+        <div class="icon-box" style="background: #2563eb;">🔨</div>
+        <div>
+          <h3>Xcode</h3>
+          <p>Apple's IDE for building iOS apps — free from the App Store</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">Xcode is Apple's official app for building iPhone and iPad apps. It includes a code editor, a visual previewer, and a simulator that lets you test your app without a real phone.</p>
+        </div>
+      </div>
+      <div class="prereq-item fade-in">
+        <div class="icon-box" style="background: var(--gray-800); color: white;"><svg viewBox="0 0 16 16" width="22" height="22" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></div>
+        <div>
+          <h3>GitHub Account</h3>
+          <p>Free account to store and share your code</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">GitHub is a website where developers store their code. Think of it like Google Drive, but specifically designed for code projects. It's free and you can sign up at github.com.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- INSTALL -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section" id="install">
+  <div class="container">
+    <span class="section-label fade-in">Step 1</span>
+    <h2 class="section-title light fade-in">Open Terminal and Install Claude Code</h2>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> npm install -g @anthropic-ai/claude-code</div>
+      </div>
+    </div>
+    <p class="section-subtitle light fade-in" style="margin-top: 32px;">That's it. One command. Then start it by typing:</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> claude</div>
+      </div>
+    </div>
+    <p class="fade-in" style="color: var(--gray-400); margin-top: 24px; font-size: 15px;">It will open a login page in your browser. Sign in with your Anthropic account and you're ready to go.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- CHOOSE YOUR APP -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section" id="build" style="background: var(--mid);">
+  <div class="container">
+    <span class="section-label fade-in">Let's build!</span>
+    <h2 class="section-title light fade-in">Choose Your App Idea</h2>
+    <p class="section-subtitle light fade-in">Think of a simple app you'd actually want on your phone. Here are some ideas:</p>
+    <div class="idea-grid">
+      <div class="idea-card fade-in"><div class="emoji">🎨</div><p>A daily mood tracker with color-coded entries</p></div>
+      <div class="idea-card fade-in"><div class="emoji">🍳</div><p>A personal recipe book with categories</p></div>
+      <div class="idea-card fade-in"><div class="emoji">✨</div><p>A gratitude journal with daily prompts</p></div>
+      <div class="idea-card fade-in"><div class="emoji">💪</div><p>A simple workout timer with custom routines</p></div>
+      <div class="idea-card fade-in"><div class="emoji">📚</div><p>A reading list tracker with ratings</p></div>
+      <div class="idea-card fade-in"><div class="emoji">🧠</div><p>Your own idea — whatever excites you!</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- CREATE XCODE PROJECT -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section">
+  <div class="container">
+    <span class="section-label fade-in">Step 2</span>
+    <h2 class="section-title light fade-in">Create the Xcode Project</h2>
+    <p class="section-subtitle light fade-in">Navigate to your project folder and tell Claude Code what to build:</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span> mkdir my-app && cd my-app</div>
+        <div class="line"><span class="prompt">$</span> claude</div>
+        <div class="spacer"></div>
+        <div class="line"><span class="user-input">&gt; Create a SwiftUI iOS app for tracking daily</span></div>
+        <div class="line"><span class="user-input">&nbsp; moods. I want a clean minimal design with a</span></div>
+        <div class="line"><span class="user-input">&nbsp; calendar view and emoji mood selector.</span></div>
+        <div class="spacer"></div>
+        <div class="line"><span class="comment">&nbsp; Claude will create the full Xcode project...</span></div>
+      </div>
+    </div>
+    <div class="callout dark fade-in">
+      <div class="icon">💡</div>
+      <p>Be as descriptive as you want! The more detail you give, the closer the result to your vision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- OPEN IN XCODE -->
+<!-- ════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <span class="section-label fade-in">Step 3</span>
+    <h2 class="section-title fade-in">Open in Xcode</h2>
+    <p class="section-subtitle fade-in">Ask Claude Code to open your project:</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="user-input">&gt; Open the Xcode project so I can preview it</span></div>
+      </div>
+    </div>
+    <h3 class="fade-in" style="font-size: 20px; font-weight: 700; margin-top: 40px; margin-bottom: 20px;">What you'll see in Xcode:</h3>
+    <div class="xcode-features">
+      <div class="xcode-feature fade-in">
+        <div class="feat-icon">📂</div>
+        <div>
+          <h3>Project Navigator</h3>
+          <p>All your SwiftUI files organized in a sidebar</p>
+        </div>
+      </div>
+      <div class="xcode-feature fade-in">
+        <div class="feat-icon">👁️</div>
+        <div>
+          <h3>Preview Canvas</h3>
+          <p>A live preview of your app — updates as code changes</p>
+        </div>
+      </div>
+      <div class="xcode-feature fade-in">
+        <div class="feat-icon">📱</div>
+        <div>
+          <h3>Simulator</h3>
+          <p>Press ▶ to launch your app in an iPhone simulator</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- ITERATE -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section">
+  <div class="container">
+    <span class="section-label fade-in">Step 4</span>
+    <h2 class="section-title light fade-in">Iterate &amp; Customize</h2>
+    <p class="section-subtitle light fade-in">This is where the magic happens. Just keep talking to Claude Code:</p>
+    <div class="iterate-list">
+      <div class="iterate-row fade-in">
+        <div class="prompt">"Change the color scheme to pastels"</div>
+        <div class="arrow">→</div>
+        <div class="result">Updates every view's styling</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">"Add a settings page with dark mode toggle"</div>
+        <div class="arrow">→</div>
+        <div class="result">Creates new SwiftUI view + navigation</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">"Make the mood emojis bigger and add animation"</div>
+        <div class="arrow">→</div>
+        <div class="result">Adds scaling + spring animations</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">"There's a bug — the date picker doesn't work"</div>
+        <div class="arrow">→</div>
+        <div class="result">Diagnoses and fixes the issue</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">"Add data persistence so entries save"</div>
+        <div class="arrow">→</div>
+        <div class="result">Implements SwiftData or UserDefaults</div>
+      </div>
+    </div>
+    <p class="fade-in" style="color: var(--pink); font-style: italic; margin-top: 32px; font-size: 16px;">💕 You're designing. Claude is coding. That's the whole idea.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HANDS ON — BUILD -->
+<!-- ════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT IS AN API -->
+<!-- ════════════════════════════════════════════ -->
+<section id="apis">
+  <div class="container">
+    <span class="section-label fade-in">New concept</span>
+    <h2 class="section-title fade-in">What is an API?</h2>
+    <p class="section-subtitle fade-in">API stands for <strong>Application Programming Interface</strong>. It's how apps talk to each other — like a waiter taking your order to the kitchen and bringing back food.</p>
+
+    <div class="compare-grid fade-in">
+      <div class="compare-card chat" style="text-align: center;">
+        <h3 style="margin-bottom: 12px;">🍽️ Restaurant Analogy</h3>
+        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
+          <strong style="color: var(--violet);">You</strong> = the app<br>
+          <strong style="color: var(--amber);">The waiter</strong> = the API<br>
+          <strong style="color: var(--emerald);">The kitchen</strong> = the server with data
+        </div>
+        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">You don't go into the kitchen yourself. You tell the waiter what you want, and the waiter brings back exactly what you asked for.</p>
+      </div>
+      <div class="compare-arrow">=</div>
+      <div class="compare-card code" style="text-align: center;">
+        <h3 style="margin-bottom: 12px;">💻 In Tech Terms</h3>
+        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
+          <strong style="color: var(--violet);">Your app</strong> sends a request<br>
+          <strong style="color: var(--amber);">The API</strong> processes it<br>
+          <strong style="color: var(--emerald);">The server</strong> sends back data
+        </div>
+        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">Your app asks for weather data, a quote, stock prices, or AI responses — and the API delivers it in a format your app can use.</p>
+      </div>
+    </div>
+
+    <h3 class="fade-in" style="font-size: 20px; font-weight: 700; margin-top: 48px; margin-bottom: 20px;">APIs are everywhere. You use them every day:</h3>
+    <div class="feature-grid">
+      <div class="feature-card fade-in">
+        <div class="icon violet">🌤️</div>
+        <h3>Weather Apps</h3>
+        <p>Your phone's weather app calls a weather API to get the forecast for your location.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon amber">🗺️</div>
+        <h3>Maps &amp; Rides</h3>
+        <p>Uber uses Google Maps API to show your route. Yelp uses it to display restaurant locations.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon emerald">💳</div>
+        <h3>Payments</h3>
+        <p>When you buy something online, the site uses Stripe or PayPal's API to process your card.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon pink">🤖</div>
+        <h3>AI Features</h3>
+        <p>Apps that use ChatGPT or Claude are calling an AI API behind the scenes to generate responses.</p>
+      </div>
+    </div>
+
+    <div class="callout fade-in" style="margin-top: 40px; background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2);">
+      <div class="icon">🔑</div>
+      <div>
+        <p style="margin-bottom: 8px;"><strong>A note about API Keys</strong></p>
+        <p style="font-size: 14px; color: var(--gray-600); line-height: 1.6;">Some APIs are completely open — like The Met's API, which we'll use today. Anyone can access it, no sign-up required. But many APIs require an <strong>API key</strong> — a unique password that identifies you and controls access. Think of it like a library card: the library is free, but you need a card to check out books. If you use an API that needs a key, Claude Code can help you set it up — just tell it "I need to add my API key" and it will handle storing it safely in your project.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="dark-section">
+  <div class="container">
+    <span class="section-label fade-in">Level up</span>
+    <h2 class="section-title light fade-in">Add an API to Your App</h2>
+    <p class="section-subtitle light fade-in">This is where your app goes from a static prototype to something that connects to the real world. Just ask Claude Code:</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="user-input">&gt; Add a feature that shows an inspirational</span></div>
+        <div class="line"><span class="user-input">&nbsp; quote of the day using a free quotes API</span></div>
+        <div class="spacer"></div>
+        <div class="line"><span class="output">&nbsp; Fetching from ZenQuotes API...</span></div>
+        <div class="line"><span class="output">&nbsp; Creating QuoteView.swift...</span></div>
+        <div class="line"><span class="output">&nbsp; Adding network request handler...</span></div>
+        <div class="line"><span class="success">&nbsp; ✓ Quote of the day now appears on the home screen</span></div>
+      </div>
+    </div>
+
+    <h3 class="fade-in" style="color: var(--white); font-size: 18px; font-weight: 600; margin-top: 40px; margin-bottom: 20px;">Ideas for APIs you could add:</h3>
+    <div class="iterate-list">
+      <div class="iterate-row fade-in">
+        <div class="prompt">Weather API</div>
+        <div class="arrow">→</div>
+        <div class="result">Show today's weather on your app's home screen</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">Quotes API</div>
+        <div class="arrow">→</div>
+        <div class="result">Display a daily motivational quote</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">Claude API</div>
+        <div class="arrow">→</div>
+        <div class="result">Add an AI chatbot or smart suggestions to your app</div>
+      </div>
+      <div class="iterate-row fade-in">
+        <div class="prompt">Unsplash API</div>
+        <div class="arrow">→</div>
+        <div class="result">Pull in beautiful background photos automatically</div>
+      </div>
+    </div>
+
+    <div class="callout dark fade-in">
+      <div class="icon">💡</div>
+      <p>You don't need to understand the technical details. Just tell Claude Code what data you want your app to show, and it handles the API connection for you.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT IS GITHUB -->
+<!-- ════════════════════════════════════════════ -->
+<section id="github">
+  <div class="container">
+    <span class="section-label fade-in">Sharing your work</span>
+    <h2 class="section-title fade-in">What is GitHub?</h2>
+    <p class="section-subtitle fade-in">Think of it as Google Drive for code — but with superpowers.</p>
+    <div class="gh-grid">
+      <div class="gh-card fade-in">
+        <span class="icon">☁️</span>
+        <h3>Cloud Storage</h3>
+        <p>Your code is safely backed up online, accessible from any computer.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">👥</span>
+        <h3>Collaboration</h3>
+        <p>Others can see your project, suggest improvements, or build on your work.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">📖</span>
+        <h3>Version History</h3>
+        <p>Every change is tracked — you can always go back to a previous version.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">⭐</span>
+        <h3>Portfolio</h3>
+        <p>Your GitHub profile becomes a living portfolio of everything you've built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PUSH TO GITHUB -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section">
+  <div class="container">
+    <span class="section-label fade-in">Step 5</span>
+    <h2 class="section-title light fade-in">Push to GitHub</h2>
+    <p class="section-subtitle light fade-in">You don't need to learn Git commands. Just tell Claude Code:</p>
+    <div class="terminal fade-in">
+      <div class="terminal-bar">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="user-input">&gt; Initialize a git repo, create a new GitHub</span></div>
+        <div class="line"><span class="user-input">&nbsp; repository called "my-mood-app", and push</span></div>
+        <div class="line"><span class="user-input">&nbsp; everything up</span></div>
+        <div class="spacer"></div>
+        <div class="line"><span class="success">&nbsp; ✓ Initialized git repository</span></div>
+        <div class="line"><span class="success">&nbsp; ✓ Created .gitignore for Xcode</span></div>
+        <div class="line"><span class="success">&nbsp; ✓ Created GitHub repo: your-name/my-mood-app</span></div>
+        <div class="line"><span class="success">&nbsp; ✓ Pushed all files to GitHub</span></div>
+      </div>
+    </div>
+    <p class="fade-in" style="color: var(--amber); font-weight: 600; margin-top: 28px; font-size: 17px;">That's the entire Git workflow — done in one prompt.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- PUBLISHING YOUR APP -->
+<!-- ════════════════════════════════════════════ -->
+<section>
+  <div class="container">
+    <span class="section-label fade-in">Getting it on a phone</span>
+    <h2 class="section-title fade-in">Publishing Your iOS App</h2>
+    <p class="section-subtitle fade-in">You have two options for getting your app onto a real iPhone:</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 28px;" class="fade-in">
+
+      <!-- Option 1 -->
+      <div style="background: var(--white); border-radius: 16px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--emerald);"></div>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="font-size: 24px;">📱</span>
+          <h3 style="font-size: 18px; font-weight: 700;">Option 1: Directly from Xcode</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--emerald); font-weight: 600; margin-bottom: 16px;">Free &amp; easiest</p>
+        <ol style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">1.</span> Plug your iPhone into your Mac with a cable</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">2.</span> On your iPhone: Settings → Privacy &amp; Security → Developer Mode — turn it on</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">3.</span> In Xcode, click the device dropdown at the top and select your iPhone</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">4.</span> You may need to sign in: Xcode → Settings → Accounts — add your Apple ID</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">5.</span> In project settings, under Signing &amp; Capabilities, check "Automatically manage signing" and select your team (your Apple ID)</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">6.</span> Hit <strong>Cmd + R</strong> to build and run on your phone</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--emerald); font-weight: 700; flex-shrink: 0;">7.</span> First time: your iPhone will ask you to trust the developer — go to Settings → General → VPN &amp; Device Management and trust your profile</li>
+        </ol>
+        <div style="margin-top: 16px; padding: 12px 16px; background: rgba(16,185,129,0.08); border-radius: 8px; font-size: 12px; color: var(--gray-600); line-height: 1.5;">
+          ⏳ The app stays on your phone for <strong>7 days</strong> before you need to re-install (free account limitation).
+        </div>
+      </div>
+
+      <!-- Option 2 -->
+      <div style="background: var(--white); border-radius: 16px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.05); position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--violet);"></div>
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+          <span style="font-size: 24px;">🚀</span>
+          <h3 style="font-size: 18px; font-weight: 700;">Option 2: TestFlight</h3>
+        </div>
+        <p style="font-size: 13px; color: var(--violet); font-weight: 600; margin-bottom: 16px;">Requires $99/year Apple Developer Program</p>
+        <ol style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--violet); font-weight: 700; flex-shrink: 0;">1.</span> Enroll at <strong>developer.apple.com</strong></li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--violet); font-weight: 700; flex-shrink: 0;">2.</span> In Xcode: Product → Archive</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--violet); font-weight: 700; flex-shrink: 0;">3.</span> Upload to App Store Connect</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--violet); font-weight: 700; flex-shrink: 0;">4.</span> Add testers in TestFlight — they get a link to install via the TestFlight app</li>
+          <li style="font-size: 13px; color: var(--gray-600); line-height: 1.5; display: flex; gap: 10px;"><span style="color: var(--violet); font-weight: 700; flex-shrink: 0;">5.</span> App lasts <strong>90 days</strong> and you can share with up to <strong>10,000 testers</strong></li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HANDS ON — BUILD -->
+<!-- ════════════════════════════════════════════ -->
+<section class="break-section violet-bg">
+  <div style="position: relative; z-index: 1;">
+    <span class="big-icon">🚀</span>
+    <h2>Hands-On Time!</h2>
+    <p>Build your iOS prototype with Claude Code</p>
+    <div class="time">~ 30 minutes ~</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HANDS ON — GITHUB -->
+<!-- ════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT YOU BUILT -->
+<!-- ════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════ -->
+<!-- MET FOR MOMS -->
+<!-- ════════════════════════════════════════════ -->
+<section class="break-section" style="background: linear-gradient(135deg, #1a0a2e, #2d1b69, #e63946); min-height: 80vh;">
+  <div style="position: relative; z-index: 1; max-width: 800px;">
+    <span class="big-icon">🏛️</span>
+    <h2 style="margin-bottom: 20px;">Met For Moms</h2>
+    <p style="font-size: 22px; color: rgba(255,255,255,0.9); margin-bottom: 16px;">Let's build an iOS app together using<br><strong style="color: var(--amber);">The Metropolitan Museum of Art's API</strong></p>
+    <p style="font-size: 16px; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; line-height: 1.6;">We'll connect to The Met's open collection — over 470,000 artworks — and build a beautiful app that brings art into your everyday life.</p>
+  </div>
+</section>
+
+<section id="wrapup">
+  <div class="container">
+    <span class="section-label fade-in">Congratulations</span>
+    <h2 class="section-title fade-in">What You Built Today</h2>
+    <div class="achieve-list">
+      <div class="achieve-item fade-in">
+        <div class="check-box">✓</div>
+        <p>Installed and used Claude Code — a professional AI coding tool</p>
+      </div>
+      <div class="achieve-item fade-in">
+        <div class="check-box">✓</div>
+        <p>Built a real iOS app prototype in SwiftUI using Xcode</p>
+      </div>
+      <div class="achieve-item fade-in">
+        <div class="check-box">✓</div>
+        <p>Pushed your project to GitHub — it's live on the internet</p>
+      </div>
+      <div class="achieve-item fade-in">
+        <div class="check-box">✓</div>
+        <p>Iterated on your design with natural language — no code written by hand</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- TIPS -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section">
+  <div class="container">
+    <span class="section-label fade-in">Pro tips</span>
+    <h2 class="section-title light fade-in">Tips for Working with Claude Code</h2>
+    <div class="tips-list">
+      <div class="tip-item fade-in">
+        <div class="tip-icon">💡</div>
+        <div>
+          <h3>Be Specific</h3>
+          <p>"Add a blue gradient header" works better than "make it look nice"</p>
+        </div>
+      </div>
+      <div class="tip-item fade-in">
+        <div class="tip-icon">✅</div>
+        <div>
+          <h3>Review Proposals</h3>
+          <p>Read what Claude plans to do before approving — you'll learn a lot this way</p>
+        </div>
+      </div>
+      <div class="tip-item fade-in">
+        <div class="tip-icon">💕</div>
+        <div>
+          <h3>Iterate Often</h3>
+          <p>Start simple, then refine. Small changes compound into something great</p>
+        </div>
+      </div>
+      <div class="tip-item fade-in">
+        <div class="tip-icon">⭐</div>
+        <div>
+          <h3>Save Checkpoints</h3>
+          <p>Ask Claude to commit to Git periodically so you can always go back</p>
+        </div>
+      </div>
+      <div class="tip-item fade-in">
+        <div class="tip-icon">🤝</div>
+        <div>
+          <h3>Ask Questions</h3>
+          <p>"Explain what this code does" — Claude Code is also a fantastic teacher</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- NEXT STEPS -->
+<!-- ════════════════════════════════════════════ -->
+<!-- ════════════════════════════════════════════ -->
+<!-- CLOSING -->
+<!-- ════════════════════════════════════════════ -->
+<section class="closing">
+  <div class="closing-content">
+    <h2>You just built an iOS app.<br><em>And pushed it to GitHub.</em><br><span class="amber">Without writing a single line of code.</span></h2>
+    <div style="width: 80px; height: 3px; background: var(--amber); margin: 40px auto;"></div>
+    <div class="author">Regina Flores Mir</div>
+    <div class="links">reginafloresmir.ai</div>
+  </div>
+</section>
+
+<!-- ═══ SCROLL ANIMATION ═══ -->
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── SLIDE DOT NAVIGATION + PAGE NUMBERS ──
+const sections = document.querySelectorAll('section');
+const totalSlides = sections.length;
+
+// Add page number to each section
+sections.forEach((sec, i) => {
+  const num = document.createElement('div');
+  num.className = 'slide-number';
+  num.textContent = `${i + 1} / ${totalSlides}`;
+  sec.style.position = 'relative';
+  sec.appendChild(num);
+});
+
+// Dot nav
+const dotNav = document.createElement('div');
+dotNav.className = 'dot-nav';
+sections.forEach((sec, i) => {
+  const dot = document.createElement('a');
+  dot.className = 'dot';
+  dot.href = '#';
+  dot.dataset.index = i;
+  dot.addEventListener('click', (e) => {
+    e.preventDefault();
+    sections[i].scrollIntoView({ behavior: 'smooth' });
+  });
+  dotNav.appendChild(dot);
+});
+document.body.appendChild(dotNav);
+
+const dotObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = Array.from(sections).indexOf(entry.target);
+      document.querySelectorAll('.dot-nav .dot').forEach((d, i) => {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(sec => dotObserver.observe(sec));
+</script>
+
+<style>
+.dot-nav {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dot-nav .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(150,150,150,0.35);
+  transition: all 0.3s ease;
+  display: block;
+  text-decoration: none;
+}
+.dot-nav .dot:hover {
+  background: var(--violet);
+  transform: scale(1.4);
+}
+.dot-nav .dot.active {
+  background: var(--violet);
+  transform: scale(1.4);
+  box-shadow: 0 0 6px rgba(124,58,237,0.4);
+}
+.slide-number {
+  position: absolute;
+  bottom: 16px;
+  right: 24px;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: rgba(150,150,150,0.5);
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+@media (max-width: 768px) {
+  .dot-nav { display: none; }
+}
+</style>
+
+</body>
+</html>
