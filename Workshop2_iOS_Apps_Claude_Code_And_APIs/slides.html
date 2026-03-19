@@ -415,7 +415,7 @@ section {
 /* ── FEATURE GRID ── */
 .feature-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 .feature-card {
@@ -880,7 +880,7 @@ section {
         <div class="tag">Workshop 2 — Today!</div>
         <h3>Claude Code</h3>
         <ul>
-          <li><span class="check">✓</span> Terminal-based AI agent</li>
+          <li><span class="check">✓</span> Terminal-based AI agent with same conversational ability</li>
           <li><span class="check">✓</span> Reads &amp; writes real files</li>
           <li><span class="check">✓</span> Manages entire projects</li>
           <li><span class="check">✓</span> Runs commands for you</li>
@@ -898,6 +898,7 @@ section {
     <span class="section-label fade-in">Introducing</span>
     <h2 class="section-title light fade-in">What is Claude Code?</h2>
     <p class="section-subtitle light fade-in">An AI coding agent that lives in your terminal. Instead of copying and pasting code from a chat window, Claude Code works directly on your computer — creating files, running commands, and building entire projects.</p>
+    <p class="section-subtitle light fade-in" style="margin-top:16px;font-size:15px;color:rgba(255,255,255,0.55);border-left:3px solid var(--violet-light);padding-left:16px;"><strong style="color:var(--violet-light);">This is agentic AI.</strong> Claude Chat answers questions. Claude Code takes actions — it can plan, decide, and execute steps on your behalf without you managing each one. That autonomy is what makes it a fundamentally different kind of tool.</p>
     <div class="terminal fade-in">
       <div class="terminal-bar">
         <div class="terminal-dot red"></div>
@@ -923,29 +924,29 @@ section {
 <!-- ════════════════════════════════════════════ -->
 <section>
   <div class="container">
-    <span class="section-label fade-in">Why it matters</span>
-    <h2 class="section-title fade-in">Why Claude Code?</h2>
-    <p class="section-subtitle fade-in">It turns you into a creative director with a tireless developer at your side.</p>
+    <span class="section-label fade-in">Chat vs. Agent</span>
+    <h2 class="section-title fade-in">Chat gives you code. Claude Code runs it.</h2>
+    <p class="section-subtitle fade-in">The gap isn't about intelligence — the same models are available in Claude Chat and Claude Code. It's about what the AI can actually touch.</p>
     <div class="feature-grid">
       <div class="feature-card fade-in">
-        <div class="icon violet">📱</div>
-        <h3>Build Real Apps</h3>
-        <p>Create actual Xcode projects that run on iPhones — not just mockups or wireframes.</p>
+        <div class="icon violet">🗂️</div>
+        <h3>Reads Your Whole Project</h3>
+        <p>Chat only sees what you paste. Claude Code reads your actual file tree — imports, data models, existing views — and writes changes directly into the right files.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="icon amber">🔧</div>
-        <h3>Handles Complexity</h3>
-        <p>It manages files, dependencies, and project structure — the hard parts you'd normally need a developer for.</p>
+        <div class="icon amber">🔁</div>
+        <h3>Closes the Feedback Loop</h3>
+        <p>With chat you copy code → paste → run → see error → paste error back. Claude Code runs commands itself, sees the output, and fixes its own mistakes — without you in the middle.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="icon emerald">☁️</div>
-        <h3>Full Workflow</h3>
-        <p>From first idea to GitHub — Claude Code handles the entire development pipeline.</p>
+        <div class="icon emerald">🧩</div>
+        <h3>Works Across Files</h3>
+        <p>A real app is never one file. Claude Code can create a SwiftUI view, wire it to a data model, add it to the nav stack, and update the Xcode project — all from one instruction.</p>
       </div>
       <div class="feature-card fade-in">
         <div class="icon pink">🤝</div>
-        <h3>You Stay in Control</h3>
-        <p>You describe what you want in plain English. Claude Code asks permission before every action.</p>
+        <h3>You Approve Every Step</h3>
+        <p>It proposes → you approve → it acts → it observes the result → it adapts. You're the architect. It's the one doing the construction work.</p>
       </div>
     </div>
   </div>
@@ -958,7 +959,7 @@ section {
   <div class="container">
     <span class="section-label fade-in">The loop</span>
     <h2 class="section-title fade-in">How Claude Code Works</h2>
-    <p class="section-subtitle fade-in">A simple four-step loop you'll repeat over and over as you build.</p>
+    <p class="section-subtitle fade-in">A five-step loop you'll repeat over and over as you build.</p>
     <div class="flow-container fade-in">
       <div class="flow-step">
         <div class="circle" style="background: var(--violet);">1</div>
@@ -981,12 +982,18 @@ section {
       <div class="flow-step">
         <div class="circle" style="background: var(--pink);">4</div>
         <h3>Claude Builds</h3>
-        <p>Creates files, runs commands, tests it</p>
+        <p>Creates files, runs commands, makes it real</p>
+      </div>
+      <div class="flow-arrow">›</div>
+      <div class="flow-step">
+        <div class="circle" style="background: var(--sky);">5</div>
+        <h3>You Test</h3>
+        <p>Does it look right? Does it do what you asked? Break it on purpose — that's how you learn what to fix next.</p>
       </div>
     </div>
-    <div class="callout fade-in">
+    <div class="callout fade-in" style="margin-top: 24px;">
       <div class="icon">💡</div>
-      <p>You never need to write code yourself. You are the creative director — Claude is the developer.</p>
+      <p>Testing isn't just for developers. If something feels off — wrong layout, unexpected behavior, a crash — describe exactly what you see and Claude Code will diagnose and fix it.</p>
     </div>
   </div>
 </section>
@@ -1021,6 +1028,7 @@ section {
           <h3>Node.js (v18+)</h3>
           <p>Runtime for Claude Code — installed via terminal</p>
           <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">Node.js is a program that lets you run JavaScript code on your computer (not just in a browser). Claude Code is built with it, so it needs Node.js to work.</p>
+          <p style="font-size: 12px; color: var(--gray-400); margin-top: 6px; line-height: 1.5;"><strong style="color: var(--gray-600);">What is JavaScript?</strong> JavaScript is one of the most popular programming languages in the world — it's what makes websites interactive. When you click a button and something happens, that's JavaScript. Originally it only ran inside browsers, but Node.js changed that by letting JavaScript run anywhere.</p>
         </div>
       </div>
       <div class="prereq-item fade-in">
@@ -1039,6 +1047,212 @@ section {
           <p style="font-size: 12px; color: var(--gray-400); margin-top: 4px; line-height: 1.5;">GitHub is a website where developers store their code. Think of it like Google Drive, but specifically designed for code projects. It's free and you can sign up at github.com.</p>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- LOCALHOST VS HOSTED -->
+<!-- ════════════════════════════════════════════ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <span class="section-label fade-in">Two environments</span>
+    <h2 class="section-title fade-in">Localhost vs. The Internet</h2>
+    <p class="section-subtitle fade-in">When Claude Code builds something, it runs on your machine first. Sharing it publicly is a separate step.</p>
+    <div class="compare-grid fade-in">
+      <div class="compare-card chat">
+        <div class="tag">Local</div>
+        <h3>Localhost</h3>
+        <ul>
+          <li><span class="check">✓</span> Runs only on your computer</li>
+          <li><span class="check">✓</span> Address looks like <code style="font-size:12px;background:rgba(0,0,0,0.08);padding:2px 6px;border-radius:4px;">localhost:3000</code></li>
+          <li><span class="check">✓</span> No one else can see it</li>
+          <li><span class="check">✓</span> Instant — no deploy needed</li>
+          <li><span class="check">✓</span> Where you build and test</li>
+        </ul>
+      </div>
+      <div class="compare-arrow">→</div>
+      <div class="compare-card code">
+        <div class="tag">Online</div>
+        <h3>Hosted / Deployed</h3>
+        <ul>
+          <li><span class="check">✓</span> Lives on a server, accessible anywhere</li>
+          <li><span class="check">✓</span> Has a real URL anyone can visit</li>
+          <li><span class="check">✓</span> GitHub is not required — it's just one option</li>
+          <li><span class="check">✓</span> Traditional hosts like GoDaddy work too</li>
+          <li><span class="check">✓</span> What your users actually see</li>
+        </ul>
+      </div>
+    </div>
+    <p class="section-subtitle fade-in" style="margin-top:32px;font-size:14px;color:var(--gray-600);">Think of localhost like a rehearsal on your own stage. Hosting is opening night — the same show, now visible to the world.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT IS GITHUB -->
+<!-- ════════════════════════════════════════════ -->
+<section id="github">
+  <div class="container">
+    <span class="section-label fade-in">Sharing your work</span>
+    <h2 class="section-title fade-in">What is GitHub?</h2>
+    <p class="section-subtitle fade-in">Think of it as Google Drive for code — but with superpowers.</p>
+    <div class="gh-grid">
+      <div class="gh-card fade-in">
+        <span class="icon">☁️</span>
+        <h3>Cloud Storage</h3>
+        <p>Your code is safely backed up online, accessible from any computer.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">👥</span>
+        <h3>Collaboration</h3>
+        <p>Others can see your project, suggest improvements, or build on your work.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">📖</span>
+        <h3>Version History</h3>
+        <p>Every change is tracked — you can always go back to a previous version.</p>
+      </div>
+      <div class="gh-card fade-in">
+        <span class="icon">⭐</span>
+        <h3>Portfolio</h3>
+        <p>Your GitHub profile becomes a living portfolio of everything you've built.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- HOSTING OPTIONS -->
+<!-- ════════════════════════════════════════════ -->
+<section style="background: var(--gray-100);">
+  <div class="container">
+    <span class="section-label fade-in">Going live</span>
+    <h2 class="section-title fade-in">Where Do People Actually Host?</h2>
+    <p class="section-subtitle fade-in">It depends on what you built. Here's the landscape.</p>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="fade-in">
+
+      <div style="background:#fff;border-radius:14px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border-top:3px solid var(--violet);">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--violet);font-weight:700;margin-bottom:12px;">Static / Web Apps</div>
+        <p style="font-size:12px;color:var(--gray-400);margin-bottom:14px;line-height:1.5;">What Claude Code usually builds — HTML, CSS, JS</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:13px;color:var(--gray-800);"><strong>GitHub Pages</strong> <span style="font-size:11px;background:rgba(16,185,129,0.1);color:#059669;padding:2px 7px;border-radius:20px;font-weight:600;">free</span></li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Vercel</strong> <span style="font-size:11px;background:rgba(16,185,129,0.1);color:#059669;padding:2px 7px;border-radius:20px;font-weight:600;">free tier</span></li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Netlify</strong> <span style="font-size:11px;background:rgba(16,185,129,0.1);color:#059669;padding:2px 7px;border-radius:20px;font-weight:600;">free tier</span></li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Cloudflare Pages</strong> <span style="font-size:11px;background:rgba(16,185,129,0.1);color:#059669;padding:2px 7px;border-radius:20px;font-weight:600;">free</span></li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border-radius:14px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border-top:3px solid var(--amber);">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#b45309;font-weight:700;margin-bottom:12px;">Traditional Hosting</div>
+        <p style="font-size:12px;color:var(--gray-400);margin-bottom:14px;line-height:1.5;">What most non-developers think of — usually WordPress-focused</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:13px;color:var(--gray-800);"><strong>GoDaddy</strong></li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Bluehost / HostGator / SiteGround</strong></li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Squarespace / Wix</strong> — no code needed</li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Shopify</strong> — e-commerce</li>
+        </ul>
+      </div>
+
+      <div style="background:#fff;border-radius:14px;padding:24px;box-shadow:0 4px 24px rgba(0,0,0,0.06);border-top:3px solid var(--pink);">
+        <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#be185d;font-weight:700;margin-bottom:12px;">Apps with Backend / Database</div>
+        <p style="font-size:12px;color:var(--gray-400);margin-bottom:14px;line-height:1.5;">When your app needs logins, data storage, or server logic</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Firebase / Supabase</strong> — database + hosting</li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Railway / Render</strong> — modern, free tiers</li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>Heroku</strong> — easy but no longer free</li>
+          <li style="font-size:13px;color:var(--gray-800);"><strong>AWS / Google Cloud / Azure</strong> — enterprise</li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="callout fade-in" style="margin-top:24px;">
+      <div class="icon">💡</div>
+      <p>What Claude Code builds is almost always the first category. GoDaddy-style hosting is designed for WordPress sites — not code you write yourself. Start with GitHub Pages or Vercel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- WHAT IS AN API -->
+<!-- ════════════════════════════════════════════ -->
+<section id="apis">
+  <div class="container">
+    <span class="section-label fade-in">New concept</span>
+    <h2 class="section-title fade-in">What is an API?</h2>
+    <p class="section-subtitle fade-in">API stands for <strong>Application Programming Interface</strong>. It's how apps talk to each other — like a waiter taking your order to the kitchen and bringing back food.</p>
+
+    <div class="compare-grid fade-in">
+      <div class="compare-card chat" style="text-align: center;">
+        <h3 style="margin-bottom: 12px;">🍽️ Restaurant Analogy</h3>
+        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
+          <strong style="color: var(--violet);">You</strong> = the app<br>
+          <strong style="color: var(--amber);">The waiter</strong> = the API<br>
+          <strong style="color: var(--emerald);">The kitchen</strong> = the server with data
+        </div>
+        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">You don't go into the kitchen yourself. You tell the waiter what you want, and the waiter brings back exactly what you asked for.</p>
+      </div>
+      <div class="compare-arrow">=</div>
+      <div class="compare-card code" style="text-align: center;">
+        <h3 style="margin-bottom: 12px;">💻 In Tech Terms</h3>
+        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
+          <strong style="color: var(--violet);">Your app</strong> sends a request<br>
+          <strong style="color: var(--amber);">The API</strong> processes it<br>
+          <strong style="color: var(--emerald);">The server</strong> sends back data
+        </div>
+        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">Your app asks for weather data, a quote, stock prices, or AI responses — and the API delivers it in a format your app can use.</p>
+      </div>
+    </div>
+
+    <h3 class="fade-in" style="font-size: 20px; font-weight: 700; margin-top: 48px; margin-bottom: 20px;">APIs are everywhere. You use them every day:</h3>
+    <div class="feature-grid">
+      <div class="feature-card fade-in">
+        <div class="icon violet">🌤️</div>
+        <h3>Weather Apps</h3>
+        <p>Your phone's weather app calls a weather API to get the forecast for your location.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon amber">🗺️</div>
+        <h3>Maps &amp; Rides</h3>
+        <p>Uber uses Google Maps API to show your route. Yelp uses it to display restaurant locations.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon emerald">💳</div>
+        <h3>Payments</h3>
+        <p>When you buy something online, the site uses Stripe or PayPal's API to process your card.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="icon pink">🤖</div>
+        <h3>AI Features</h3>
+        <p>Apps that use ChatGPT or Claude are calling an AI API behind the scenes to generate responses.</p>
+      </div>
+    </div>
+
+    <div class="callout fade-in" style="margin-top: 40px; background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2);">
+      <div class="icon">🔑</div>
+      <div>
+        <p style="margin-bottom: 8px;"><strong>A note about API Keys</strong></p>
+        <p style="font-size: 14px; color: var(--gray-600); line-height: 1.6;">Some APIs are completely open — like The Met's API, which we'll use today. Anyone can access it, no sign-up required. But many APIs require an <strong>API key</strong> — a unique password that identifies you and controls access. Think of it like a library card: the library is free, but you need a card to check out books. If you use an API that needs a key, Claude Code can help you set it up — just tell it "I need to add my API key" and it will handle storing it safely in your project.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════ -->
+<!-- CHOOSE YOUR APP IDEA -->
+<!-- ════════════════════════════════════════════ -->
+<section class="dark-section" id="build" style="background: var(--mid);">
+  <div class="container">
+    <span class="section-label fade-in">Let's build!</span>
+    <h2 class="section-title light fade-in">Choose Your App Idea</h2>
+    <p class="section-subtitle light fade-in">Think of a simple app you'd actually want on your phone. Here are some ideas:</p>
+    <div class="idea-grid">
+      <div class="idea-card fade-in"><div class="emoji">🎨</div><p>A daily mood tracker with color-coded entries</p></div>
+      <div class="idea-card fade-in"><div class="emoji">🍳</div><p>A personal recipe book with categories</p></div>
+      <div class="idea-card fade-in"><div class="emoji">✨</div><p>A gratitude journal with daily prompts</p></div>
+      <div class="idea-card fade-in"><div class="emoji">💪</div><p>A simple workout timer with custom routines</p></div>
+      <div class="idea-card fade-in"><div class="emoji">📚</div><p>A reading list tracker with ratings</p></div>
+      <div class="idea-card fade-in"><div class="emoji">🧠</div><p>Your own idea — whatever excites you!</p></div>
     </div>
   </div>
 </section>
@@ -1077,23 +1291,6 @@ section {
 
 <!-- ════════════════════════════════════════════ -->
 <!-- CHOOSE YOUR APP -->
-<!-- ════════════════════════════════════════════ -->
-<section class="dark-section" id="build" style="background: var(--mid);">
-  <div class="container">
-    <span class="section-label fade-in">Let's build!</span>
-    <h2 class="section-title light fade-in">Choose Your App Idea</h2>
-    <p class="section-subtitle light fade-in">Think of a simple app you'd actually want on your phone. Here are some ideas:</p>
-    <div class="idea-grid">
-      <div class="idea-card fade-in"><div class="emoji">🎨</div><p>A daily mood tracker with color-coded entries</p></div>
-      <div class="idea-card fade-in"><div class="emoji">🍳</div><p>A personal recipe book with categories</p></div>
-      <div class="idea-card fade-in"><div class="emoji">✨</div><p>A gratitude journal with daily prompts</p></div>
-      <div class="idea-card fade-in"><div class="emoji">💪</div><p>A simple workout timer with custom routines</p></div>
-      <div class="idea-card fade-in"><div class="emoji">📚</div><p>A reading list tracker with ratings</p></div>
-      <div class="idea-card fade-in"><div class="emoji">🧠</div><p>Your own idea — whatever excites you!</p></div>
-    </div>
-  </div>
-</section>
-
 <!-- ════════════════════════════════════════════ -->
 <!-- CREATE XCODE PROJECT -->
 <!-- ════════════════════════════════════════════ -->
@@ -1213,70 +1410,6 @@ section {
 <!-- ════════════════════════════════════════════ -->
 <!-- HANDS ON — BUILD -->
 <!-- ════════════════════════════════════════════ -->
-<!-- ════════════════════════════════════════════ -->
-<!-- WHAT IS AN API -->
-<!-- ════════════════════════════════════════════ -->
-<section id="apis">
-  <div class="container">
-    <span class="section-label fade-in">New concept</span>
-    <h2 class="section-title fade-in">What is an API?</h2>
-    <p class="section-subtitle fade-in">API stands for <strong>Application Programming Interface</strong>. It's how apps talk to each other — like a waiter taking your order to the kitchen and bringing back food.</p>
-
-    <div class="compare-grid fade-in">
-      <div class="compare-card chat" style="text-align: center;">
-        <h3 style="margin-bottom: 12px;">🍽️ Restaurant Analogy</h3>
-        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
-          <strong style="color: var(--violet);">You</strong> = the app<br>
-          <strong style="color: var(--amber);">The waiter</strong> = the API<br>
-          <strong style="color: var(--emerald);">The kitchen</strong> = the server with data
-        </div>
-        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">You don't go into the kitchen yourself. You tell the waiter what you want, and the waiter brings back exactly what you asked for.</p>
-      </div>
-      <div class="compare-arrow">=</div>
-      <div class="compare-card code" style="text-align: center;">
-        <h3 style="margin-bottom: 12px;">💻 In Tech Terms</h3>
-        <div style="font-size: 15px; color: var(--gray-600); line-height: 1.8;">
-          <strong style="color: var(--violet);">Your app</strong> sends a request<br>
-          <strong style="color: var(--amber);">The API</strong> processes it<br>
-          <strong style="color: var(--emerald);">The server</strong> sends back data
-        </div>
-        <p style="margin-top: 16px; font-size: 14px; color: var(--gray-600); line-height: 1.6;">Your app asks for weather data, a quote, stock prices, or AI responses — and the API delivers it in a format your app can use.</p>
-      </div>
-    </div>
-
-    <h3 class="fade-in" style="font-size: 20px; font-weight: 700; margin-top: 48px; margin-bottom: 20px;">APIs are everywhere. You use them every day:</h3>
-    <div class="feature-grid">
-      <div class="feature-card fade-in">
-        <div class="icon violet">🌤️</div>
-        <h3>Weather Apps</h3>
-        <p>Your phone's weather app calls a weather API to get the forecast for your location.</p>
-      </div>
-      <div class="feature-card fade-in">
-        <div class="icon amber">🗺️</div>
-        <h3>Maps &amp; Rides</h3>
-        <p>Uber uses Google Maps API to show your route. Yelp uses it to display restaurant locations.</p>
-      </div>
-      <div class="feature-card fade-in">
-        <div class="icon emerald">💳</div>
-        <h3>Payments</h3>
-        <p>When you buy something online, the site uses Stripe or PayPal's API to process your card.</p>
-      </div>
-      <div class="feature-card fade-in">
-        <div class="icon pink">🤖</div>
-        <h3>AI Features</h3>
-        <p>Apps that use ChatGPT or Claude are calling an AI API behind the scenes to generate responses.</p>
-      </div>
-    </div>
-
-    <div class="callout fade-in" style="margin-top: 40px; background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.2);">
-      <div class="icon">🔑</div>
-      <div>
-        <p style="margin-bottom: 8px;"><strong>A note about API Keys</strong></p>
-        <p style="font-size: 14px; color: var(--gray-600); line-height: 1.6;">Some APIs are completely open — like The Met's API, which we'll use today. Anyone can access it, no sign-up required. But many APIs require an <strong>API key</strong> — a unique password that identifies you and controls access. Think of it like a library card: the library is free, but you need a card to check out books. If you use an API that needs a key, Claude Code can help you set it up — just tell it "I need to add my API key" and it will handle storing it safely in your project.</p>
-      </div>
-    </div>
-  </div>
-</section>
 <section class="dark-section">
   <div class="container">
     <span class="section-label fade-in">Level up</span>
@@ -1330,38 +1463,6 @@ section {
   </div>
 </section>
 
-<!-- ════════════════════════════════════════════ -->
-<!-- WHAT IS GITHUB -->
-<!-- ════════════════════════════════════════════ -->
-<section id="github">
-  <div class="container">
-    <span class="section-label fade-in">Sharing your work</span>
-    <h2 class="section-title fade-in">What is GitHub?</h2>
-    <p class="section-subtitle fade-in">Think of it as Google Drive for code — but with superpowers.</p>
-    <div class="gh-grid">
-      <div class="gh-card fade-in">
-        <span class="icon">☁️</span>
-        <h3>Cloud Storage</h3>
-        <p>Your code is safely backed up online, accessible from any computer.</p>
-      </div>
-      <div class="gh-card fade-in">
-        <span class="icon">👥</span>
-        <h3>Collaboration</h3>
-        <p>Others can see your project, suggest improvements, or build on your work.</p>
-      </div>
-      <div class="gh-card fade-in">
-        <span class="icon">📖</span>
-        <h3>Version History</h3>
-        <p>Every change is tracked — you can always go back to a previous version.</p>
-      </div>
-      <div class="gh-card fade-in">
-        <span class="icon">⭐</span>
-        <h3>Portfolio</h3>
-        <p>Your GitHub profile becomes a living portfolio of everything you've built.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ════════════════════════════════════════════ -->
 <!-- PUSH TO GITHUB -->
@@ -1473,6 +1574,10 @@ section {
     <h2 style="margin-bottom: 20px;">Met For Moms</h2>
     <p style="font-size: 22px; color: rgba(255,255,255,0.9); margin-bottom: 16px;">Let's build an iOS app together using<br><strong style="color: var(--amber);">The Metropolitan Museum of Art's API</strong></p>
     <p style="font-size: 16px; color: rgba(255,255,255,0.6); max-width: 600px; margin: 0 auto; line-height: 1.6;">We'll connect to The Met's open collection — over 470,000 artworks — and build a beautiful app that brings art into your everyday life.</p>
+    <div style="display:flex;gap:32px;justify-content:center;margin-top:24px;">
+      <a href="https://www.metmuseum.org/hubs/open-access" target="_blank" style="font-size:14px;color:rgba(255,255,255,0.5);border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;text-decoration:none;letter-spacing:0.05em;">The Met's Open Access ↗</a>
+      <a href="https://metmuseum.github.io/" target="_blank" style="font-size:14px;color:rgba(255,255,255,0.5);border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;text-decoration:none;letter-spacing:0.05em;">API Documentation ↗</a>
+    </div>
   </div>
 </section>
 
@@ -1534,7 +1639,7 @@ section {
         <div class="tip-icon">⭐</div>
         <div>
           <h3>Save Checkpoints</h3>
-          <p>Ask Claude to commit to Git periodically so you can always go back</p>
+          <p>Your files save locally as you work — that's automatic. But push to GitHub at meaningful moments: <em>"app launches," "calendar view done," "API connected."</em> GitHub is your undo button across time — local saves disappear if your computer does.</p>
         </div>
       </div>
       <div class="tip-item fade-in">
@@ -1616,6 +1721,10 @@ const dotObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.3 });
 
 sections.forEach(sec => dotObserver.observe(sec));
+
+window.addEventListener('beforeunload', () => window.scrollTo(0, 0));
+history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
 </script>
 
 <style>

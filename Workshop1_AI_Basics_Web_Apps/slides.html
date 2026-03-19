@@ -27,6 +27,28 @@
       font-family: 'Playfair Display', serif; font-size: 13px;
       color: rgba(255,255,255,0.4); letter-spacing: 2px; pointer-events: none;
     }
+    #topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 16px 28px;
+      display: flex; align-items: center; gap: 40px;
+      background: rgba(26,26,46,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+    #topnav ul { list-style: none; display: flex; gap: 28px; }
+    #topnav ul li a {
+      color: rgba(245,240,232,0.55); text-decoration: none;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.03em;
+      transition: color 0.2s;
+    }
+    #topnav ul li a:hover { color: var(--cream); }
+    #workshop-label {
+      font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+      color: rgba(201,168,76,0.8); letter-spacing: 0.05em; white-space: nowrap;
+    }
+    #workshop-label span { color: rgba(245,240,232,0.4); }
+    @media (max-width: 768px) { #topnav ul { display: none; } }
+
     #nav-dots {
       position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
       z-index: 100; display: flex; flex-direction: column; gap: 10px;
@@ -190,6 +212,18 @@
 </head>
 <body>
 
+<div id="topnav">
+  <div id="workshop-label">workshop<span>//</span>01</div>
+  <ul>
+    <li><a href="#p1">Intro</a></li>
+    <li><a href="#pDeep">ML Basics</a></li>
+    <li><a href="#p2">Models</a></li>
+    <li><a href="#pVibe">Vibe Coding</a></li>
+    <li><a href="#p4">Claude Code</a></li>
+    <li><a href="#p7">Build</a></li>
+    <li><a href="#p8">Workshop</a></li>
+  </ul>
+</div>
 <div id="page-counter">01 / 18</div>
 <nav id="nav-dots">
   <button class="dot active" onclick="goTo(0)"></button>
