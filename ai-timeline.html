@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The AI Revolution — Interactive Timeline</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a28;
+    --border: #2a2a3a;
+    --text: #e8e8f0;
+    --text-dim: #8888a0;
+    --accent-anthropic: #d4a574;
+    --accent-openai: #10a37f;
+    --accent-google: #4285f4;
+    --accent-meta: #0668E1;
+    --accent-deepseek: #5b6ee1;
+    --accent-openclaw: #ff6b35;
+    --accent-other: #a78bfa;
+    --glow-anthropic: rgba(212,165,116,0.35);
+    --glow-openai: rgba(16,163,127,0.35);
+    --glow-google: rgba(66,133,244,0.35);
+    --glow-meta: rgba(6,104,225,0.35);
+    --glow-deepseek: rgba(91,110,225,0.35);
+    --glow-openclaw: rgba(255,107,53,0.35);
+    --glow-other: rgba(167,139,250,0.35);
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  /* ── LAYOUT ─────────────────────────────────── */
+  .app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  /* Header */
+  header {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 28px 20px 12px;
+    position: relative; z-index: 10;
+  }
+  header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 50%, #d4a574 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  header p {
+    color: var(--text-dim);
+    font-size: 0.88rem;
+    font-weight: 300;
+  }
+
+  /* Filter bar */
+  .filters {
+    flex-shrink: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 7px;
+    padding: 12px 20px;
+    position: relative; z-index: 10;
+  }
+  .filter-btn {
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: #555; color: var(--text); }
+  .filter-btn.active { color: #fff; }
+  .filter-btn.active[data-filter="all"] { background: var(--surface2); border-color: #666; }
+  .filter-btn.active[data-filter="anthropic"] { background: var(--accent-anthropic); border-color: var(--accent-anthropic); color: #111; }
+  .filter-btn.active[data-filter="openai"] { background: var(--accent-openai); border-color: var(--accent-openai); }
+  .filter-btn.active[data-filter="google"] { background: var(--accent-google); border-color: var(--accent-google); }
+  .filter-btn.active[data-filter="meta"] { background: var(--accent-meta); border-color: var(--accent-meta); }
+  .filter-btn.active[data-filter="deepseek"] { background: var(--accent-deepseek); border-color: var(--accent-deepseek); }
+  .filter-btn.active[data-filter="openclaw"] { background: var(--accent-openclaw); border-color: var(--accent-openclaw); }
+  .filter-btn.active[data-filter="other"] { background: var(--accent-other); border-color: var(--accent-other); }
+
+  /* ── SCROLL HINT ────────────────────────────── */
+  .scroll-hint {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 0 0 6px;
+    color: var(--text-dim);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    position: relative; z-index: 10;
+  }
+  .scroll-hint span { animation: pulse 2s ease-in-out infinite; display: inline-block; }
+  @keyframes pulse { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+  /* ── TIMELINE VIEWPORT ──────────────────────── */
+  .timeline-viewport {
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    position: relative;
+    z-index: 10;
+    cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+  }
+  .timeline-viewport:active { cursor: grabbing; }
+  .timeline-viewport::-webkit-scrollbar { height: 6px; }
+  .timeline-viewport::-webkit-scrollbar-track { background: transparent; }
+  .timeline-viewport::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  /* Inner scroll area */
+  .timeline-track {
+    display: flex;
+    align-items: stretch;
+    height: 100%;
+    padding: 0 60px;
+    position: relative;
+  }
+
+  /* ── YEAR MARKERS ───────────────────────────── */
+  .year-marker {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+    z-index: 1;
+  }
+  .year-marker span {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  /* ── THE HORIZONTAL LINE ────────────────────── */
+  .timeline-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--border) 2%, var(--border) 98%, transparent 100%);
+    z-index: 2;
+  }
+
+  /* Date ticks on the line */
+  .date-tick {
+    position: absolute;
+    top: 50%;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .date-tick .tick-line {
+    width: 1px;
+    height: 10px;
+    background: var(--border);
+    margin-bottom: -1px;
+  }
+  .date-tick .tick-label {
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    margin-top: 4px;
+    opacity: 0.6;
+  }
+
+  /* ── EVENT COLUMNS ──────────────────────────── */
+  .event-col {
+    flex-shrink: 0;
+    width: 260px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 8px;
+    transition: opacity 0.35s, transform 0.35s;
+  }
+  .event-col.filtered-out {
+    width: 0 !important;
+    padding: 0 !important;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  /* Alternating: odd cards above line, even below */
+  .event-col .card-area {
+    position: absolute;
+    width: 240px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .event-col:nth-child(odd) .card-area { bottom: calc(50% + 28px); }
+  .event-col:nth-child(even) .card-area { top: calc(50% + 28px); }
+
+  /* Connector stem from card to node */
+  .event-col .stem {
+    position: absolute;
+    width: 2px;
+    background: var(--border);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .event-col:nth-child(odd) .stem { top: calc(50% - 28px); height: 22px; }
+  .event-col:nth-child(even) .stem { top: calc(50% + 6px); height: 22px; }
+
+  /* Node on the line */
+  .node {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+  }
+  .node::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    transition: border-color 0.25s;
+  }
+
+  /* Date label below/above node */
+  .node-date {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--text-dim);
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .event-col:nth-child(odd) .node-date { top: calc(50% + 14px); }
+  .event-col:nth-child(even) .node-date { bottom: calc(50% + 14px); }
+
+  /* Card */
+  .event-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  .event-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 12px 0 0 12px;
+  }
+
+  .event-card:hover {
+    transform: translateY(-2px);
+    border-color: #555;
+  }
+
+  .event-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 5px;
+  }
+  .event-desc {
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .company-badge {
+    display: inline-block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 2px 8px;
+    border-radius: 8px;
+    border: 1px solid;
+  }
+
+  /* ── COMPANY COLORS ─────────────────────────── */
+  .c-anthropic .event-card::before { background: var(--accent-anthropic); }
+  .c-anthropic .event-card:hover { box-shadow: 0 6px 24px var(--glow-anthropic); }
+  .c-anthropic .company-badge { color: var(--accent-anthropic); border-color: var(--accent-anthropic); }
+  .c-anthropic .node { background: var(--accent-anthropic); box-shadow: 0 0 10px var(--glow-anthropic); }
+  .c-anthropic .node::after { border-color: rgba(212,165,116,0.2); }
+  .c-anthropic .stem { background: rgba(212,165,116,0.3); }
+
+  .c-openai .event-card::before { background: var(--accent-openai); }
+  .c-openai .event-card:hover { box-shadow: 0 6px 24px var(--glow-openai); }
+  .c-openai .company-badge { color: var(--accent-openai); border-color: var(--accent-openai); }
+  .c-openai .node { background: var(--accent-openai); box-shadow: 0 0 10px var(--glow-openai); }
+  .c-openai .node::after { border-color: rgba(16,163,127,0.2); }
+  .c-openai .stem { background: rgba(16,163,127,0.3); }
+
+  .c-google .event-card::before { background: var(--accent-google); }
+  .c-google .event-card:hover { box-shadow: 0 6px 24px var(--glow-google); }
+  .c-google .company-badge { color: var(--accent-google); border-color: var(--accent-google); }
+  .c-google .node { background: var(--accent-google); box-shadow: 0 0 10px var(--glow-google); }
+  .c-google .node::after { border-color: rgba(66,133,244,0.2); }
+  .c-google .stem { background: rgba(66,133,244,0.3); }
+
+  .c-meta .event-card::before { background: var(--accent-meta); }
+  .c-meta .event-card:hover { box-shadow: 0 6px 24px var(--glow-meta); }
+  .c-meta .company-badge { color: var(--accent-meta); border-color: var(--accent-meta); }
+  .c-meta .node { background: var(--accent-meta); box-shadow: 0 0 10px var(--glow-meta); }
+  .c-meta .node::after { border-color: rgba(6,104,225,0.2); }
+  .c-meta .stem { background: rgba(6,104,225,0.3); }
+
+  .c-deepseek .event-card::before { background: var(--accent-deepseek); }
+  .c-deepseek .event-card:hover { box-shadow: 0 6px 24px var(--glow-deepseek); }
+  .c-deepseek .company-badge { color: var(--accent-deepseek); border-color: var(--accent-deepseek); }
+  .c-deepseek .node { background: var(--accent-deepseek); box-shadow: 0 0 10px var(--glow-deepseek); }
+  .c-deepseek .node::after { border-color: rgba(91,110,225,0.2); }
+  .c-deepseek .stem { background: rgba(91,110,225,0.3); }
+
+  .c-openclaw .event-card::before { background: var(--accent-openclaw); }
+  .c-openclaw .event-card:hover { box-shadow: 0 6px 24px var(--glow-openclaw); }
+  .c-openclaw .company-badge { color: var(--accent-openclaw); border-color: var(--accent-openclaw); }
+  .c-openclaw .node { background: var(--accent-openclaw); box-shadow: 0 0 10px var(--glow-openclaw); }
+  .c-openclaw .node::after { border-color: rgba(255,107,53,0.2); }
+  .c-openclaw .stem { background: rgba(255,107,53,0.3); }
+
+  .c-other .event-card::before { background: var(--accent-other); }
+  .c-other .event-card:hover { box-shadow: 0 6px 24px var(--glow-other); }
+  .c-other .company-badge { color: var(--accent-other); border-color: var(--accent-other); }
+  .c-other .node { background: var(--accent-other); box-shadow: 0 0 10px var(--glow-other); }
+  .c-other .node::after { border-color: rgba(167,139,250,0.2); }
+  .c-other .stem { background: rgba(167,139,250,0.3); }
+
+  /* Hover grow the node */
+  .event-col:hover .node { transform: translate(-50%,-50%) scale(1.6); }
+
+  /* ── MODAL ──────────────────────────────────── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    max-width: 520px;
+    width: 100%;
+    padding: 30px;
+    position: relative;
+    animation: modalIn 0.25s ease;
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-close {
+    position: absolute; top: 12px; right: 14px;
+    background: none; border: none; color: var(--text-dim);
+    font-size: 1.5rem; cursor: pointer;
+    transition: color 0.2s;
+    line-height: 1;
+  }
+  .modal-close:hover { color: #fff; }
+  .modal h2 { font-size: 1.2rem; margin-bottom: 4px; }
+  .modal .modal-date { color: var(--text-dim); font-size: 0.82rem; margin-bottom: 14px; }
+  .modal .modal-desc { color: var(--text-dim); line-height: 1.65; font-size: 0.9rem; margin-bottom: 20px; }
+  .modal-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 22px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #a78bfa, #d4a574);
+    color: #111;
+    font-weight: 600;
+    font-size: 0.88rem;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .modal-link:hover { opacity: 0.85; }
+  .modal-link svg { width: 15px; height: 15px; }
+
+  /* ── STARFIELD ──────────────────────────────── */
+  .stars {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .stars canvas { width: 100%; height: 100%; }
+
+  /* ── MINIMAP ────────────────────────────────── */
+  .minimap {
+    flex-shrink: 0;
+    height: 28px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+  }
+  .minimap-track {
+    position: absolute;
+    inset: 4px 10px;
+  }
+  .minimap-dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.7;
+  }
+  .minimap-viewport {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    pointer-events: none;
+  }
+  .minimap-year {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.55rem;
+    color: rgba(255,255,255,0.25);
+    font-weight: 600;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="stars"><canvas id="starfield"></canvas></div>
+
+<header>
+  <h1>The AI Revolution</h1>
+  <p>Scroll through the most transformative era in technology — Nov 2022 to today</p>
+</header>
+
+<nav class="filters" id="filters"></nav>
+<div class="scroll-hint"><span>← scroll or drag to explore →</span></div>
+
+<div class="timeline-viewport" id="viewport">
+  <div class="timeline-track" id="track">
+    <div class="timeline-line"></div>
+  </div>
+</div>
+
+<div class="minimap" id="minimap">
+  <div class="minimap-track" id="minimap-track"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" id="modal-close">&times;</button>
+    <div id="modal-badge" style="margin-bottom:10px;"></div>
+    <h2 id="modal-title"></h2>
+    <div class="modal-date" id="modal-date"></div>
+    <div class="modal-desc" id="modal-desc"></div>
+    <a class="modal-link" id="modal-link" href="#" target="_blank" rel="noopener">
+      Read the full story
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+    </a>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────
+const events = [
+  { date:"2022-11-30", title:"ChatGPT Launches", company:"openai",
+    desc:"OpenAI releases ChatGPT, a conversational AI built on GPT-3.5. It reaches 100 million users within two months, igniting the generative AI era.",
+    url:"https://openai.com/index/chatgpt/" },
+  { date:"2023-02-06", title:"Google Announces Bard", company:"google",
+    desc:"Google reveals Bard, its conversational AI service powered by LaMDA, in response to the ChatGPT phenomenon.",
+    url:"https://blog.google/technology/ai/bard-google-ai-search-updates/" },
+  { date:"2023-03-14", title:"GPT-4 Released", company:"openai",
+    desc:"OpenAI launches GPT-4 — the first large multimodal model accepting images and text. A massive leap in reasoning and reliability.",
+    url:"https://openai.com/index/gpt-4/" },
+  { date:"2023-03-14", title:"Claude 1 Released", company:"anthropic",
+    desc:"Anthropic releases Claude 1, its first publicly available AI assistant, focused on being helpful, harmless, and honest.",
+    url:"https://www.anthropic.com/news/introducing-claude" },
+  { date:"2023-07-11", title:"Claude 2 — Public Access", company:"anthropic",
+    desc:"Claude 2 launches with a 100K context window and becomes the first Anthropic model available to the general public via claude.ai.",
+    url:"https://www.anthropic.com/news/claude-2" },
+  { date:"2023-07-18", title:"Llama 2 Open-Sourced", company:"meta",
+    desc:"Meta releases Llama 2 as open source, democratizing access to powerful LLMs and sparking the open-weight movement.",
+    url:"https://ai.meta.com/llama/" },
+  { date:"2023-12-06", title:"Gemini 1.0 Announced", company:"google",
+    desc:"Google DeepMind unveils Gemini 1.0, its first natively multimodal model in Ultra, Pro, and Nano sizes.",
+    url:"https://blog.google/technology/ai/google-gemini-ai/" },
+  { date:"2024-02-15", title:"Sora Previewed", company:"openai",
+    desc:"OpenAI previews Sora, an AI model that generates realistic 60-second videos from text prompts, stunning the creative world.",
+    url:"https://openai.com/index/sora/" },
+  { date:"2024-03-04", title:"Claude 3 Family", company:"anthropic",
+    desc:"Anthropic launches Claude 3 in three sizes — Haiku, Sonnet, and Opus — with Opus setting new benchmarks across reasoning tasks.",
+    url:"https://www.anthropic.com/news/claude-3-family" },
+  { date:"2024-04-18", title:"Llama 3 Released", company:"meta",
+    desc:"Meta releases Llama 3 (8B and 70B), pushing open-source model quality closer to proprietary frontier models.",
+    url:"https://ai.meta.com/blog/meta-llama-3/" },
+  { date:"2024-05-13", title:"GPT-4o — Omni Model", company:"openai",
+    desc:"OpenAI releases GPT-4o with native voice, vision, and text in a single model — real-time voice conversations become possible.",
+    url:"https://openai.com/index/hello-gpt-4o/" },
+  { date:"2024-06-20", title:"Claude 3.5 Sonnet", company:"anthropic",
+    desc:"A surprise release: Claude 3.5 Sonnet delivers Opus-level performance at Sonnet pricing — widely considered the best coding model.",
+    url:"https://www.anthropic.com/news/claude-3-5-sonnet" },
+  { date:"2024-09-12", title:"OpenAI o1 — Reasoning", company:"openai",
+    desc:"OpenAI launches o1 (\"Strawberry\"), a model that reasons step-by-step, achieving PhD-level science and math performance.",
+    url:"https://openai.com/index/learning-to-reason-with-llms/" },
+  { date:"2024-12-09", title:"Gemini 2.0 Flash", company:"google",
+    desc:"Google releases Gemini 2.0 Flash with native image generation and real-time multimodal streaming for the agentic era.",
+    url:"https://blog.google/technology/google-deepmind/google-gemini-ai-update-december-2024/" },
+  { date:"2025-01-20", title:"DeepSeek-R1 Shocks the World", company:"deepseek",
+    desc:"Chinese startup DeepSeek releases R1, an open-source reasoning model matching OpenAI o1. It becomes the #1 app on the U.S. App Store.",
+    url:"https://api-docs.deepseek.com/news/news250120" },
+  { date:"2025-02-24", title:"Claude Code Launches", company:"anthropic",
+    desc:"Anthropic releases Claude Code, an agentic CLI coding tool that lets developers delegate entire programming tasks from the terminal.",
+    url:"https://www.anthropic.com/news/claude-code" },
+  { date:"2025-03-25", title:"Gemini 2.5 Pro", company:"google",
+    desc:"Google DeepMind releases Gemini 2.5 Pro with advanced reasoning and Deep Think mode, claiming the top spot on LMArena.",
+    url:"https://blog.google/technology/google-deepmind/gemini-model-thinking-updates-march-2025/" },
+  { date:"2025-05-22", title:"Claude 4 & Sonnet 4", company:"anthropic",
+    desc:"Anthropic launches the Claude 4 generation. Claude Code goes GA, and Claude gains agentic tool use at unprecedented levels.",
+    url:"https://www.anthropic.com/news/claude-4" },
+  { date:"2025-07-23", title:"Llama 4 — 10M Context", company:"meta",
+    desc:"Meta releases Llama 4 with a 10-million-token context window, pushing the boundary of what open-source models can handle.",
+    url:"https://ai.meta.com/blog/llama-4/" },
+  { date:"2025-08-07", title:"GPT-5 Released", company:"openai",
+    desc:"OpenAI launches GPT-5, its most powerful model, with major improvements in reasoning, multi-modal understanding, and scientific problem-solving.",
+    url:"https://openai.com/index/gpt-5/" },
+  { date:"2025-09-09", title:"Claude Sonnet 4.5", company:"anthropic",
+    desc:"Claude Sonnet 4.5 achieves 77.2% on SWE-bench Verified, the highest score ever, cementing Anthropic's lead in coding AI.",
+    url:"https://www.anthropic.com/news/claude-sonnet-4-5" },
+  { date:"2025-11-14", title:"OpenClaw Launches", company:"openclaw",
+    desc:"An open-source AI agent tool launches on GitHub as \"Clawdbot.\" It goes viral and is later renamed OpenClaw, amassing 247K stars.",
+    url:"https://github.com/openclaw/openclaw" },
+  { date:"2025-11-17", title:"Grok 4.1 by xAI", company:"other",
+    desc:"Elon Musk's xAI releases Grok 4.1, kicking off a 25-day window where four major companies launch flagship models.",
+    url:"https://x.ai/" },
+  { date:"2025-11-18", title:"Gemini 3.0", company:"google",
+    desc:"Google DeepMind launches Gemini 3.0, its next-generation multimodal model, just one day after xAI's Grok 4.1 release.",
+    url:"https://blog.google/technology/google-deepmind/" },
+  { date:"2025-11-24", title:"Claude Opus 4.5", company:"anthropic",
+    desc:"Anthropic releases Claude Opus 4.5 during the November model rush, competing head-to-head with the latest from OpenAI, Google, and xAI.",
+    url:"https://www.anthropic.com/news" },
+  { date:"2025-11-25", title:"Codex-Max", company:"openai",
+    desc:"OpenAI launches Codex-Max, specialized for codebase understanding, refactoring, test generation, and multi-file reasoning.",
+    url:"https://openai.com/" },
+  { date:"2025-12-11", title:"GPT-5.2", company:"openai",
+    desc:"OpenAI releases GPT-5.2, closing an extraordinary 25-day period of four flagship model launches across the industry.",
+    url:"https://openai.com/" },
+  { date:"2026-01-30", title:"OpenClaw Rebrands", company:"openclaw",
+    desc:"After trademark disputes, Clawdbot becomes Moltbot then OpenClaw. The project reaches 247K GitHub stars in the open-source AI agent ecosystem.",
+    url:"https://github.com/openclaw/openclaw" },
+  { date:"2026-02-05", title:"Claude Opus 4.6", company:"anthropic",
+    desc:"Anthropic launches Claude Opus 4.6 with a 1M-token context window, new agentic capabilities, and Cowork mode for desktop automation.",
+    url:"https://www.anthropic.com/news/claude-opus-4-6" },
+  { date:"2026-02-20", title:"AlphaEvolve", company:"google",
+    desc:"Google DeepMind launches AlphaEvolve, an AI that autonomously optimizes code using evolutionary strategies, achieving SOTA on 75% of math problems.",
+    url:"https://deepmind.google/discover/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/" },
+  { date:"2026-03-06", title:"GPT Open-Source Models", company:"openai",
+    desc:"OpenAI releases gpt-oss-120b and gpt-oss-20b, its first open-source models with high reasoning capabilities for accessible hardware.",
+    url:"https://openai.com/" },
+];
+
+events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+const companyNames = {
+  anthropic:"Anthropic", openai:"OpenAI", google:"Google DeepMind",
+  meta:"Meta", deepseek:"DeepSeek", openclaw:"OpenClaw", other:"Other"
+};
+const companyColors = {
+  anthropic:"#d4a574", openai:"#10a37f", google:"#4285f4",
+  meta:"#0668E1", deepseek:"#5b6ee1", openclaw:"#ff6b35", other:"#a78bfa"
+};
+
+// ─── BUILD FILTERS ──────────────────────────────────────────────
+const filterContainer = document.getElementById("filters");
+const companies = ["all", ...new Set(events.map(e => e.company))];
+companies.forEach(c => {
+  const btn = document.createElement("button");
+  btn.className = "filter-btn" + (c === "all" ? " active" : "");
+  btn.dataset.filter = c;
+  btn.textContent = c === "all" ? "All" : companyNames[c] || c;
+  btn.addEventListener("click", () => filterEvents(c));
+  filterContainer.appendChild(btn);
+});
+
+// ─── BUILD TIMELINE ─────────────────────────────────────────────
+const track = document.getElementById("track");
+const viewport = document.getElementById("viewport");
+
+events.forEach((ev, i) => {
+  const col = document.createElement("div");
+  col.className = `event-col c-${ev.company}`;
+  col.dataset.index = i;
+  col.dataset.company = ev.company;
+
+  const dateObj = new Date(ev.date + "T12:00:00");
+  const shortDate = dateObj.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"2-digit" });
+  const fullDate = dateObj.toLocaleDateString("en-US", { month:"long", day:"numeric", year:"numeric" });
+
+  col.innerHTML = `
+    <div class="card-area">
+      <div class="event-card" onclick="openModal(${i})">
+        <div class="event-title">${ev.title}</div>
+        <div class="event-desc">${ev.desc}</div>
+        <span class="company-badge">${companyNames[ev.company]}</span>
+      </div>
+    </div>
+    <div class="stem"></div>
+    <div class="node" onclick="openModal(${i})"></div>
+    <div class="node-date">${shortDate}</div>
+  `;
+  track.appendChild(col);
+});
+
+// ─── YEAR MARKERS (background) ──────────────────────────────────
+const firstDate = new Date(events[0].date);
+const lastDate = new Date(events[events.length - 1].date);
+const totalMs = lastDate - firstDate;
+
+function addYearMarkers() {
+  const trackWidth = track.scrollWidth;
+  const years = new Set(events.map(e => e.date.slice(0,4)));
+  years.forEach(yr => {
+    // find first event of that year
+    const idx = events.findIndex(e => e.date.startsWith(yr));
+    if (idx < 0) return;
+    const col = track.querySelectorAll(".event-col")[idx];
+    if (!col) return;
+    const marker = document.createElement("div");
+    marker.className = "year-marker";
+    marker.style.left = (col.offsetLeft + col.offsetWidth / 2) + "px";
+    marker.innerHTML = `<span>${yr}</span>`;
+    track.appendChild(marker);
+  });
+}
+// Defer to after layout
+requestAnimationFrame(() => requestAnimationFrame(addYearMarkers));
+
+// ─── MINIMAP ────────────────────────────────────────────────────
+const minimapTrack = document.getElementById("minimap-track");
+const minimap = document.getElementById("minimap");
+
+function buildMinimap() {
+  minimapTrack.innerHTML = "";
+  const mapW = minimapTrack.offsetWidth;
+  const trackW = track.scrollWidth;
+
+  // dots
+  const cols = track.querySelectorAll(".event-col");
+  cols.forEach((col, i) => {
+    if (col.classList.contains("filtered-out")) return;
+    const pct = (col.offsetLeft + col.offsetWidth / 2) / trackW * 100;
+    const dot = document.createElement("div");
+    dot.className = "minimap-dot";
+    dot.style.left = pct + "%";
+    dot.style.background = companyColors[events[i].company] || "#888";
+    minimapTrack.appendChild(dot);
+  });
+
+  // year labels
+  const years = [...new Set(events.map(e => e.date.slice(0,4)))];
+  years.forEach(yr => {
+    const idx = events.findIndex(e => e.date.startsWith(yr));
+    const col = cols[idx];
+    if (!col || col.classList.contains("filtered-out")) return;
+    const pct = (col.offsetLeft + col.offsetWidth / 2) / trackW * 100;
+    const lbl = document.createElement("div");
+    lbl.className = "minimap-year";
+    lbl.style.left = pct + "%";
+    lbl.textContent = yr;
+    minimapTrack.appendChild(lbl);
+  });
+
+  updateMinimapViewport();
+}
+
+const minimapVP = document.createElement("div");
+minimapVP.className = "minimap-viewport";
+minimapTrack.appendChild(minimapVP);
+
+function updateMinimapViewport() {
+  const trackW = track.scrollWidth;
+  const vpW = viewport.clientWidth;
+  const scrollL = viewport.scrollLeft;
+  const mapW = minimapTrack.offsetWidth;
+
+  const left = (scrollL / trackW) * mapW;
+  const width = (vpW / trackW) * mapW;
+  minimapVP.style.left = left + "px";
+  minimapVP.style.width = width + "px";
+}
+
+viewport.addEventListener("scroll", updateMinimapViewport);
+window.addEventListener("resize", () => { buildMinimap(); });
+
+minimap.addEventListener("click", (e) => {
+  const rect = minimapTrack.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  const target = pct * track.scrollWidth - viewport.clientWidth / 2;
+  viewport.scrollTo({ left: target, behavior: "smooth" });
+});
+
+requestAnimationFrame(() => requestAnimationFrame(buildMinimap));
+
+// ─── DRAG TO SCROLL ─────────────────────────────────────────────
+let isDragging = false, startX, scrollStart;
+viewport.addEventListener("mousedown", e => {
+  if (e.target.closest(".event-card") || e.target.closest(".node")) return;
+  isDragging = true;
+  startX = e.pageX;
+  scrollStart = viewport.scrollLeft;
+  viewport.style.cursor = "grabbing";
+});
+window.addEventListener("mousemove", e => {
+  if (!isDragging) return;
+  e.preventDefault();
+  viewport.scrollLeft = scrollStart - (e.pageX - startX);
+});
+window.addEventListener("mouseup", () => {
+  isDragging = false;
+  viewport.style.cursor = "grab";
+});
+
+// ─── FILTERING ──────────────────────────────────────────────────
+function filterEvents(company) {
+  document.querySelectorAll(".filter-btn").forEach(b =>
+    b.classList.toggle("active", b.dataset.filter === company)
+  );
+  document.querySelectorAll(".event-col").forEach(col => {
+    if (company === "all" || col.dataset.company === company) {
+      col.classList.remove("filtered-out");
+    } else {
+      col.classList.add("filtered-out");
+    }
+  });
+  // Rebuild year markers and minimap after transition
+  setTimeout(() => {
+    track.querySelectorAll(".year-marker").forEach(m => m.remove());
+    addYearMarkers();
+    buildMinimap();
+  }, 400);
+}
+
+// ─── MODAL ──────────────────────────────────────────────────────
+const overlay = document.getElementById("modal-overlay");
+
+function openModal(i) {
+  const ev = events[i];
+  const dateObj = new Date(ev.date + "T12:00:00");
+  const dateStr = dateObj.toLocaleDateString("en-US", { weekday:"long", month:"long", day:"numeric", year:"numeric" });
+
+  document.getElementById("modal-badge").innerHTML =
+    `<span class="company-badge" style="color:var(--accent-${ev.company});border-color:var(--accent-${ev.company})">${companyNames[ev.company]}</span>`;
+  document.getElementById("modal-title").textContent = ev.title;
+  document.getElementById("modal-date").textContent = dateStr;
+  document.getElementById("modal-desc").textContent = ev.desc;
+  document.getElementById("modal-link").href = ev.url;
+  overlay.classList.add("open");
+}
+
+document.getElementById("modal-close").addEventListener("click", () => overlay.classList.remove("open"));
+overlay.addEventListener("click", e => { if (e.target === overlay) overlay.classList.remove("open"); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") overlay.classList.remove("open"); });
+
+// ─── KEYBOARD NAV ───────────────────────────────────────────────
+document.addEventListener("keydown", e => {
+  if (overlay.classList.contains("open")) return;
+  if (e.key === "ArrowRight") viewport.scrollBy({ left: 300, behavior: "smooth" });
+  if (e.key === "ArrowLeft") viewport.scrollBy({ left: -300, behavior: "smooth" });
+});
+
+// ─── STARFIELD ──────────────────────────────────────────────────
+(function() {
+  const canvas = document.getElementById("starfield");
+  const ctx = canvas.getContext("2d");
+  let w, h, stars = [];
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener("resize", resize);
+  for (let i = 0; i < 100; i++) {
+    stars.push({
+      x: Math.random()*w, y: Math.random()*h,
+      r: Math.random()*1.1+0.3, a: Math.random()*0.4+0.1,
+      phase: Math.random()*Math.PI*2
+    });
+  }
+  function draw() {
+    ctx.clearRect(0,0,w,h);
+    const t = Date.now()*0.001;
+    stars.forEach(s => {
+      const alpha = s.a + Math.sin(t*0.5+s.phase)*0.12;
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(200,200,240,${Math.max(0,alpha)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
